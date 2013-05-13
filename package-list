@@ -1,0 +1,9 @@
+com.xively.client
+com.xively.client.http
+com.xively.client.http.api
+com.xively.client.http.exception
+com.xively.client.http.impl
+com.xively.client.http.util
+com.xively.client.http.util.exception
+com.xively.client.model
+com.xively.client.utils
