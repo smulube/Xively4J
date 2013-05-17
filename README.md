@@ -109,3 +109,4 @@ javadoc -d doc/ \
 	-subpackages com.xively.client \
 	-stylesheetfile src/main/res/doc_stylesheet.css
 ```
+[![githalytics.com alpha](https://cruel-carlota.pagodabox.com/d9a7d4737a3b94c9446d616fadcf8059 "githalytics.com")](http://githalytics.com/xively/Xively4J)
