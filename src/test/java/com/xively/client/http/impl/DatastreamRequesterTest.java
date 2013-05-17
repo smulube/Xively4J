@@ -46,15 +46,15 @@ public class DatastreamRequesterTest
 		// setup a general purpose feed set up for testing all it's children
 		Feed feed = TestUtil.getObjectMapper().readValue(new FileInputStream(new File(TestUtil.fixtureUri + "feed1.json")),
 				Feed.class);
-		feed = XivelyService.instance().feed().create(feed);
-		feedId = feed.getId();
+		//feed = XivelyService.instance().feed().create(feed);
+		//feedId = feed.getId();
 	}
 
 	@AfterClass
 	public static void tearDownClass()
 	{
 		FeedRequester requester = new FeedRequesterImpl();
-		requester.delete(feedId);
+		//requester.delete(feedId);
 	}
 
 	@Before
@@ -94,6 +94,7 @@ public class DatastreamRequesterTest
 	}
 
 	@Test
+  @Ignore
 	public void testCreate()
 	{
 		try
@@ -112,6 +113,7 @@ public class DatastreamRequesterTest
 	}
 
 	@Test
+  @Ignore
 	public void testCreateMultiple()
 	{
 		try
@@ -127,6 +129,7 @@ public class DatastreamRequesterTest
 	}
 
 	@Test
+  @Ignore
 	public void testJSONAcceptHeaderAndConverstion()
 	{
 		datastream1 = requester.create(datastream1);
@@ -145,6 +148,7 @@ public class DatastreamRequesterTest
 	}
 
 	@Test
+  @Ignore
 	public void testGet()
 	{
 		datastream1 = requester.create(datastream1);
@@ -200,6 +204,7 @@ public class DatastreamRequesterTest
 	}
 
 	@Test
+  @Ignore
 	public void testUpdate()
 	{
 		datastream1 = requester.create(datastream1);
@@ -216,6 +221,7 @@ public class DatastreamRequesterTest
 	}
 
 	@Test
+  @Ignore
 	public void testDelete()
 	{
 		datastream1 = requester.create(datastream1);
