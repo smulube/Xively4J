@@ -1,5 +1,7 @@
 # Xively wrapper for Java (Xively4J)
 
+[![Build Status](https://travis-ci.org/xively/Xively4J.png?branch=master)](https://travis-ci.org/xively/Xively4J)
+
 ## Overview
 
 This is a RESTful Java client for accessing Xively API. It uses [Apache HttpComponent](http://hc.apache.org/) for handling HTTP requests while remaining decoupled.
