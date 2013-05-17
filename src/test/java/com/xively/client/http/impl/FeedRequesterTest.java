@@ -76,6 +76,7 @@ public class FeedRequesterTest
 	}
 
 	@Test
+  @Ignore
 	public void testCreateAndList()
 	{
 		try
@@ -105,6 +106,7 @@ public class FeedRequesterTest
 	}
 
 	@Test
+  @Ignore
 	public void testJSONAcceptHeaderAndConverstion()
 	{
 		feed1 = requester.create(feed1);
@@ -123,6 +125,7 @@ public class FeedRequesterTest
 	}
 
 	@Test
+  @Ignore
 	public void testGet()
 	{
 		feed1 = requester.create(feed1);
@@ -208,6 +211,7 @@ public class FeedRequesterTest
 	}
 
 	@Test
+  @Ignore
 	public void testUpdate()
 	{
 		feed1 = requester.create(feed1);
@@ -225,6 +229,7 @@ public class FeedRequesterTest
 	}
 
 	@Test
+  @Ignore
 	public void testDelete()
 	{
 		feed1 = requester.create(feed1);

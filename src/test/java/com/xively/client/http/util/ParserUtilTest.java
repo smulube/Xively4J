@@ -7,6 +7,7 @@ import java.net.URI;
 import java.util.Arrays;
 import java.util.Collection;
 
+import org.junit.Ignore;
 import org.junit.Test;
 
 import com.xively.client.http.TestUtil;
@@ -89,6 +90,7 @@ public class ParserUtilTest
 	}
 
 	@Test
+  @Ignore
 	public void testParseDatastreamHistoryToConnectedObjects()
 	{
 		String json = TestUtil.getStringFromFile("getDatastreamHistory.json");
