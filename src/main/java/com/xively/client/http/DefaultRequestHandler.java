@@ -30,7 +30,7 @@ import com.xively.client.utils.StringUtil;
 /**
  * Handler for building and making requests, uses {@link DefaultResponseHandler}
  * to process the response
- * 
+ *
  * @author s0pau
  */
 public class DefaultRequestHandler
@@ -39,7 +39,7 @@ public class DefaultRequestHandler
 
 	private static final String HEADER_KEY_API = "X-ApiKey";
 	private static final String HEADER_USER_AGENT = "User Agent";
-	private static final String XIVELY_USER_AGENT = "Xively-Java-Lib/1.0";
+	private static final String XIVELY_USER_AGENT = "Xively-Java-Lib/0.1.0-SNAPSHOT";
 
 	private String baseURI;
 
@@ -88,9 +88,9 @@ public class DefaultRequestHandler
 
 	/**
 	 * * Make the request to Xively API and return the response string
-	 * 
+	 *
 	 * @param <T extends ConnectedObject>
-	 * 
+	 *
 	 * @param requestMethod
 	 *            http request methods
 	 * @param appPath
@@ -99,7 +99,7 @@ public class DefaultRequestHandler
 	 *            objects to be parsed as body for api call
 	 * @param params
 	 *            key-value of params for api call
-	 * 
+	 *
 	 * @return response string
 	 */
 
