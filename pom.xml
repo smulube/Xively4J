@@ -27,6 +27,7 @@
   <scm>
     <url>https://github.com/xively/Xively4J</url>
     <connection>scm:git:git://github.com/xively/Xively4J.git</connection>
+    <developerConnection>scm:git:git@github.com:xively/Xively4J.git</developerConnection>
   </scm>
 
   <developers>
