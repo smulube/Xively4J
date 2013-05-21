@@ -23,6 +23,20 @@
     <connection>scm:git:git://github.com/xively/Xively4J.git</connection>
   </scm>
 
+  <developers>
+    <developer>
+      <id>s0pau</id>
+      <name>Stephanie Pau</name>
+    </developer>
+    <developer>
+      <id>smulube</id>
+      <name>Sam Mulube</name>
+      <email>sam.mulube@xively.com</email>
+      <organization>Xively Ltd.</organization>
+      <organizationUrl>https://xively.com</organizationUrl>
+    </developer>
+  </developers>
+
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 	</properties>
