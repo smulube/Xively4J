@@ -7,7 +7,6 @@ import java.net.URI;
 import java.util.Arrays;
 import java.util.Collection;
 
-import org.junit.Ignore;
 import org.junit.Test;
 
 import com.xively.client.http.TestUtil;
@@ -90,52 +89,51 @@ public class ParserUtilTest
 	}
 
 	@Test
-  @Ignore
 	public void testParseDatastreamHistoryToConnectedObjects()
 	{
-		String json = TestUtil.getStringFromFile("getDatastreamHistory.json");
+		String json = TestUtil.getStringFromFile("datastreamHistory.json");
 		Collection<Datastream> retval = ParserUtil.toConnectedObjects(json, Datastream.class);
 		assertEquals(1, retval.size());
 
 		Datastream ds = (Datastream) retval.toArray()[0];
-		assertEquals("random5", ds.getId());
+		assertEquals("test_datastream_history", ds.getId());
 		assertEquals("1.0", ds.getMaxValue());
 		assertEquals("2013-01-04T10:30:00.119435Z", ds.getUpdatedAt());
 		assertEquals("0.00334173", ds.getValue());
 
 		assertEquals(8, ds.getDatapoints().size());
-		Datapoint[] dpList = (Datapoint[]) ds.getDatapoints().toArray();
+		Datapoint[] dpList = ds.getDatapoints().toArray(new Datapoint[0]);
 
 		Datapoint dp = new Datapoint();
 		dp.setAt("2013-01-01T14:14:55.118845Z");
 		dp.setValue("0.25741970");
 		assertEquals(dp, dpList[0]);
 
-		dp.setAt("2013-01-01T14:29:55.123420Z");
+		dp.setAt("2013-02-02T14:29:55.123420Z");
 		dp.setValue("0.86826886");
 		assertEquals(dp, dpList[1]);
 
-		dp.setAt("2013-01-01T14:44:55.111267Z");
+		dp.setAt("2013-02-02T14:44:55.111267Z");
 		dp.setValue("0.28586252");
 		assertEquals(dp, dpList[2]);
 
-		dp.setAt("2013-01-01T14:59:55.126180Z");
+		dp.setAt("2013-03-03T14:59:55.126180Z");
 		dp.setValue("0.48122377");
 		assertEquals(dp, dpList[3]);
 
-		dp.setAt("2013-01-01T15:14:55.121795Z");
+		dp.setAt("2013-03-03T15:14:55.121795Z");
 		dp.setValue("0.60897230");
 		assertEquals(dp, dpList[4]);
 
-		dp.setAt("2013-01-01T15:29:55.105327Z");
+		dp.setAt("2013-03-03T15:29:55.105327Z");
 		dp.setValue("0.52898451");
 		assertEquals(dp, dpList[5]);
 
-		dp.setAt("2013-01-01T15:44:55.115502Z");
+		dp.setAt("2013-04-04T15:44:55.115502Z");
 		dp.setValue("0.36369879");
 		assertEquals(dp, dpList[6]);
 
-		dp.setAt("2013-01-01T15:59:55.111692Z");
+		dp.setAt("2013-04-04T15:59:55.111692Z");
 		dp.setValue("0.54204623");
 		assertEquals(dp, dpList[7]);
 	}
