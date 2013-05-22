@@ -104,7 +104,7 @@ https://oss.sonatype.org/content/repositories/snapshots/com/xively/client/xively
 To actual publish the snapshot, you should run:
 
 ```bash
-$ mvn clean deploy
+$ mvn -DperformRelease=true clean deploy
 ```
 
 For details on what a SNAPSHOT version is, please read POM syntax guide at
