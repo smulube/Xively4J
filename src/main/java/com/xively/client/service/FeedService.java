@@ -7,7 +7,7 @@ import java.io.IOException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.xively.client.Constants;
+import com.xively.client.XivelyConstants;
 import com.xively.client.XivelyClient;
 import com.xively.client.http.XivelyRequest;
 import com.xively.client.models.Feed;
@@ -34,7 +34,7 @@ public class FeedService extends BaseService {
 		}
 
 		StringBuilder uri = new StringBuilder(client.getBaseUri());
-		uri.append("/").append(Constants.SEGMENT_FEEDS);
+		uri.append("/").append(XivelyConstants.SEGMENT_FEEDS);
 		uri.append("/").append(id);
 
 		XivelyRequest request = createRequest();
@@ -52,7 +52,7 @@ public class FeedService extends BaseService {
 		}
 
 		StringBuilder uri = new StringBuilder(client.getBaseUri());
-		uri.append("/").append(Constants.SEGMENT_FEEDS);
+		uri.append("/").append(XivelyConstants.SEGMENT_FEEDS);
 		uri.append("/").append(id);
 
 		XivelyRequest request = createRequest();
@@ -64,7 +64,7 @@ public class FeedService extends BaseService {
 
 	public Feed createFeed(Feed feed) throws IOException {
 		StringBuilder uri = new StringBuilder(client.getBaseUri());
-		uri.append("/").append(Constants.SEGMENT_FEEDS);
+		uri.append("/").append(XivelyConstants.SEGMENT_FEEDS);
 
 		XivelyRequest request = createRequest();
 		request.setUri(uri);

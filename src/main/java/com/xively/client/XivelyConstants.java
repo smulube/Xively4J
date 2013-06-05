@@ -6,7 +6,7 @@ package com.xively.client;
  * @author sam
  *
  */
-public interface Constants {
+public interface XivelyConstants {
 
 	String API_HOST = "api.xively.com";
 

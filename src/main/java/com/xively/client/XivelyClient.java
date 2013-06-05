@@ -29,6 +29,7 @@ import com.xively.client.http.XivelyResponse;
 import com.xively.client.models.DomainObject;
 import com.xively.client.models.ResponseError;
 import com.xively.client.service.FeedService;
+import com.xively.client.utils.EncodingUtils;
 import com.xively.client.utils.JsonUtils;
 
 /**
@@ -74,6 +75,8 @@ public class XivelyClient {
 	protected final String baseUri;
 
 	private String apiKey;
+	private String username;
+	private String credentials;
 	private String userAgent = USER_AGENT;
 	private final Integer connectionTimeout;
 	private final Integer socketTimeout;
@@ -86,14 +89,14 @@ public class XivelyClient {
 	private final Logger logger = LoggerFactory.getLogger(XivelyClient.class);
 
 	public XivelyClient() {
-		this(Constants.API_HOST);
+		this(XivelyConstants.API_HOST);
 	}
 
 	/**
 	 * @param hostname
 	 */
 	public XivelyClient(String hostname) {
-		this(hostname, -1, Constants.PROTOCOL_HTTPS);
+		this(hostname, -1, XivelyConstants.PROTOCOL_HTTPS);
 	}
 
 	/**
@@ -102,7 +105,7 @@ public class XivelyClient {
 	 * @param port
 	 */
 	public XivelyClient(String hostname, int port) {
-		this(hostname, port, Constants.PROTOCOL_HTTPS);
+		this(hostname, port, XivelyConstants.PROTOCOL_HTTPS);
 	}
 
 	/**
@@ -148,6 +151,22 @@ public class XivelyClient {
 	 */
 	public XivelyClient setApiKey(String apiKey) {
 		this.apiKey = apiKey;
+
+		return this;
+	}
+
+	/**
+	 *
+	 * @param username
+	 * @param password
+	 * @return
+	 */
+	public XivelyClient setCredentials(String username, String password) {
+		this.username = username;
+		StringBuilder sb = new StringBuilder("Basic ");
+		sb.append(EncodingUtils.toBase64(username + ":" + password));
+
+		this.credentials = sb.toString();
 
 		return this;
 	}
@@ -281,7 +300,7 @@ public class XivelyClient {
 			obj.setId(id);
 
 			return new XivelyResponse(response, obj);
-		}  else {
+		} else {
 			throw createException(response);
 		}
 	}
@@ -339,7 +358,7 @@ public class XivelyClient {
 		}
 
 		httpRequest.addHeader(HEADER_USER_AGENT, userAgent);
-		httpRequest.addHeader(HEADER_ACCEPT, Constants.CONTENT_TYPE_JSON);
+		httpRequest.addHeader(HEADER_ACCEPT, XivelyConstants.CONTENT_TYPE_JSON);
 	}
 
 	/**
@@ -400,7 +419,7 @@ public class XivelyClient {
 
 		if (entity != null) {
 			BufferedReader reader = new BufferedReader(new InputStreamReader(
-					entity.getContent(), Constants.CHARSET_UTF8), bufferSize);
+					entity.getContent(), XivelyConstants.CHARSET_UTF8), bufferSize);
 			try {
 				return JsonUtils.fromJson(reader, type);
 			} catch (JsonParseException jpe) {
@@ -457,10 +476,10 @@ public class XivelyClient {
 	@Override
 	public String toString() {
 		return new ToStringBuilder(this).append("apiKey", this.apiKey)
+				.append("username", this.username)
 				.append("baseUri", this.baseUri)
 				.append("userAgent", this.userAgent)
 				.append("connectionTimeout", this.connectionTimeout)
 				.append("socketTimeout", this.socketTimeout).toString();
 	}
-
 }
