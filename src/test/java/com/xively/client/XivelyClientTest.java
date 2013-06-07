@@ -25,25 +25,25 @@ public class XivelyClientTest {
 	@Test
 	public void testBaseUriDefaultsToXivelyApi() {
 		this.client = new XivelyClient();
-		assertEquals("https://api.xively.com", this.client.baseUri);
+		assertEquals("https://api.xively.com/v2", this.client.baseUri);
 	}
 
 	@Test
 	public void testBaseUriCanBeSet() {
 		this.client = new XivelyClient("beta.xively.com");
-		assertEquals("https://beta.xively.com", this.client.baseUri);
+		assertEquals("https://beta.xively.com/v2", this.client.baseUri);
 	}
 
 	@Test
 	public void testBaseUriAndPortCanBeSet() {
 		this.client = new XivelyClient("beta.xively.com", 8000);
-		assertEquals("https://beta.xively.com:8000", this.client.baseUri);
+		assertEquals("https://beta.xively.com:8000/v2", this.client.baseUri);
 	}
 
 	@Test
 	public void testBaseUriPortAndSchemeCanBeSet() {
 		this.client = new XivelyClient("beta.xively.com", 8000, "http");
-		assertEquals("http://beta.xively.com:8000", this.client.baseUri);
+		assertEquals("http://beta.xively.com:8000/v2", this.client.baseUri);
 	}
 
 }

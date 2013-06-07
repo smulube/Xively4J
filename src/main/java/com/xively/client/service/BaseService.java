@@ -23,7 +23,7 @@ public abstract class BaseService {
 		this.client = client;
 	}
 
-	protected XivelyRequest createRequest() {
+	public XivelyRequest createRequest() {
 		return new XivelyRequest();
 	}
 

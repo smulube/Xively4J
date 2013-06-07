@@ -10,6 +10,7 @@ import org.slf4j.LoggerFactory;
 import com.xively.client.XivelyClient;
 import com.xively.client.XivelyConstants;
 import com.xively.client.http.XivelyRequest;
+import com.xively.client.http.XivelyResponse;
 import com.xively.client.models.Feed;
 
 /**
@@ -38,10 +39,12 @@ public class FeedService extends BaseService {
 		uri.append("/").append(id);
 
 		XivelyRequest request = createRequest();
-		request.setUri(uri);
+		request.setUri(uri.toString());
 		request.setType(Feed.class);
 
-		return (Feed) client.get(request).getDomainObject();
+		XivelyResponse response = client.get(request);
+
+		return (Feed) response.getDomainObject();
 	}
 
 	public Feed updateFeed(Feed feed) throws IOException {
@@ -56,7 +59,7 @@ public class FeedService extends BaseService {
 		uri.append("/").append(id);
 
 		XivelyRequest request = createRequest();
-		request.setUri(uri);
+		request.setUri(uri.toString());
 		request.setObject(feed);
 
 		return (Feed) client.put(request).getDomainObject();

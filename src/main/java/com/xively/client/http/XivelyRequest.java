@@ -29,15 +29,6 @@ public class XivelyRequest {
 	 * @param uri
 	 * @return
 	 */
-	public XivelyRequest setUri(StringBuilder uri) {
-		return setUri(uri != null ? uri.toString() : null);
-	}
-
-	/**
-	 *
-	 * @param uri
-	 * @return
-	 */
 	public XivelyRequest setUri(String uri) {
 		this.uri = uri;
 		return this;

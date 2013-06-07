@@ -4,11 +4,11 @@ package com.xively.client.http;
 
 import java.net.HttpURLConnection;
 
-
+import org.apache.commons.lang3.builder.ToStringBuilder;
 
 /**
- * Response class that provides access to the parsed response body, status code, and any
- * headers returned from the Xively API. Does not do any JSON parsing.
+ * Response class that provides access to the parsed response body, status code,
+ * and any headers returned from the Xively API. Does not do any JSON parsing.
  *
  * @author sam
  *
@@ -37,5 +37,16 @@ public class XivelyResponse {
 	 */
 	public String getHeader(String name) {
 		return response.getHeaderField(name);
+	}
+
+	/*
+	 * (non-Javadoc)
+	 *
+	 * @see java.lang.Object#toString()
+	 */
+	@Override
+	public String toString() {
+		return new ToStringBuilder(this).append("response", response)
+				.append("domainObject", domainObject).toString();
 	}
 }

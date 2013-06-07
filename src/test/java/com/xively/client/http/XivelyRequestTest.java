@@ -27,15 +27,8 @@ public class XivelyRequestTest {
 	}
 
 	@Test
-	public void testCanSetUriWithAString() {
+	public void testCanSetGetUri() {
 		this.request.setUri("http://example.com");
-		assertEquals("http://example.com", this.request.getUri());
-	}
-
-	@Test
-	public void testCanSetUriWithAStringBuilder() {
-		StringBuilder sb = new StringBuilder("http://example.com");
-		this.request.setUri(sb);
 		assertEquals("http://example.com", this.request.getUri());
 	}
 

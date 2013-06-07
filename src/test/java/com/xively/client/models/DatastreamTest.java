@@ -2,10 +2,7 @@
 // This is part of Xively4J library, it is under the BSD 3-Clause license.
 package com.xively.client.models;
 
-import static org.junit.Assert.assertEquals;
-
 import org.junit.Before;
-import org.junit.Test;
 
 /**
  * @author sam
@@ -26,11 +23,6 @@ public class DatastreamTest {
 		this.datastream.setMaxValue("100.2");
 		this.datastream.setMinValue(2.2);
 
-	}
-
-	@Test
-	public void testToJson() {
-		assertEquals("bar", this.datastream.toJson());
 	}
 
 }

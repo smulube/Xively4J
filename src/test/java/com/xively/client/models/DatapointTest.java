@@ -2,7 +2,6 @@
 // This is part of Xively4J library, it is under the BSD 3-Clause license.
 package com.xively.client.models;
 
-import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.fail;
 
 import org.junit.Before;
@@ -31,11 +30,6 @@ public class DatapointTest {
 	@Ignore
 	public void test() {
 		fail("Not yet implemented");
-	}
-
-	@Test
-	public void testToJson() {
-		assertEquals(this.datapoint1.toJson(), "foo");
 	}
 
 }
