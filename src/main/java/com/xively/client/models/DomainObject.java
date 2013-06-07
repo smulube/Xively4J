@@ -8,7 +8,7 @@ import java.io.Serializable;
  * @author sam
  *
  */
-public interface DomainObject extends Serializable, Jsonable {
+public interface DomainObject extends Serializable {
 
 	/**
 	 * Return the id attribute of this domain object.

@@ -9,7 +9,6 @@ import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 
 import com.google.gson.annotations.SerializedName;
-import com.xively.client.utils.JsonUtils;
 
 /**
  * @author sam
@@ -214,16 +213,6 @@ public class Feed extends DomainObjectImpl {
 				.append(website, other.website).append(tags, other.tags)
 				.append(location, other.location)
 				.append(isPrivate, other.isPrivate).isEquals();
-	}
-
-	/*
-	 * (non-Javadoc)
-	 *
-	 * @see com.xively.client.models.Jsonable#toJson()
-	 */
-	@Override
-	public String toJson() {
-		return JsonUtils.toJson(this);
 	}
 
 	/*

@@ -5,26 +5,17 @@ package com.xively.client.models;
 import java.io.Serializable;
 
 import com.google.gson.annotations.SerializedName;
-import com.xively.client.utils.JsonUtils;
 
 /**
  * @author sam
  *
  */
-public class ResponseError implements Jsonable, Serializable {
+public class ResponseError implements Serializable {
 
 	private static final long serialVersionUID = -4364903901007662594L;
 
 	private String title;
 	@SerializedName("errors") private String message;
-
-	/* (non-Javadoc)
-	 * @see com.xively.client.models.Jsonable#toJson()
-	 */
-	@Override
-	public String toJson() {
-		return JsonUtils.toJson(this);
-	}
 
 	/**
 	 * @return the title

@@ -6,8 +6,6 @@ import java.util.Collection;
 
 import org.apache.commons.lang3.builder.EqualsBuilder;
 
-import com.xively.client.utils.JsonUtils;
-
 /**
  * @author sam
  *
@@ -179,13 +177,5 @@ public class Datastream extends DomainObjectImpl {
 				.append(unit, other.unit)
 				.append(datapoints, other.datapoints)
 				.isEquals();
-	}
-
-	/* (non-Javadoc)
-	 * @see com.xively.client.models.Jsonable#toJson()
-	 */
-	@Override
-	public String toJson() {
-		return JsonUtils.toJson(this);
 	}
 }

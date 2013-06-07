@@ -5,8 +5,6 @@ package com.xively.client.models;
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 
-import com.xively.client.utils.JsonUtils;
-
 /**
  * @author sam
  *
@@ -92,13 +90,5 @@ public class Datapoint extends DomainObjectImpl {
 		Datapoint other = (Datapoint) obj;
 
 		return new EqualsBuilder().append(value, other.value).isEquals();
-	}
-
-	/* (non-Javadoc)
-	 * @see com.xively.client.models.Jsonable#toJson()
-	 */
-	@Override
-	public String toJson() {
-		return JsonUtils.toJson(this);
 	}
 }
