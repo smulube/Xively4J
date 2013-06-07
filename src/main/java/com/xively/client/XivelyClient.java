@@ -2,23 +2,16 @@
 // This is part of Xively4J library, it is under the BSD 3-Clause license.
 package com.xively.client;
 
+import java.io.BufferedOutputStream;
 import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.lang.reflect.Type;
+import java.net.HttpURLConnection;
+import java.net.URL;
 
 import org.apache.commons.lang3.builder.ToStringBuilder;
-import org.apache.http.Header;
-import org.apache.http.HttpEntity;
-import org.apache.http.HttpResponse;
-import org.apache.http.client.HttpClient;
-import org.apache.http.client.methods.HttpGet;
-import org.apache.http.client.methods.HttpPost;
-import org.apache.http.client.methods.HttpPut;
-import org.apache.http.client.methods.HttpRequestBase;
-import org.apache.http.entity.StringEntity;
-import org.apache.http.impl.client.DefaultHttpClient;
-import org.apache.http.params.CoreConnectionPNames;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -26,7 +19,6 @@ import com.google.gson.JsonParseException;
 import com.xively.client.exceptions.RequestException;
 import com.xively.client.http.XivelyRequest;
 import com.xively.client.http.XivelyResponse;
-import com.xively.client.models.DomainObject;
 import com.xively.client.models.ResponseError;
 import com.xively.client.service.FeedService;
 import com.xively.client.utils.EncodingUtils;
@@ -43,11 +35,17 @@ public class XivelyClient {
 
 	protected static final String HEADER_API_KEY = "X-ApiKey";
 
+	protected static final String HEADER_AUTHORIZATION = "Authorization";
+
 	protected static final String HEADER_USER_AGENT = "User-Agent";
 
 	protected static final String HEADER_ACCEPT = "Accept";
 
+	protected static final String HEADER_CONTENT_TYPE = "Content-Type";
+
 	protected static final String HEADER_LOCATION = "Location";
+
+	protected static final String HEADER_CONTENT_LENGTH = "Content-Length";
 
 	protected static final String HTTP_GET = "GET";
 
@@ -59,6 +57,8 @@ public class XivelyClient {
 
 	protected static final String USER_AGENT = "Xively4J/" + VERSION;
 
+	protected static final String CONTENT_TYPE_JSON = "application/json";
+
 	protected static final int HTTP_OK = 200;
 	protected static final int HTTP_CREATED = 201;
 	protected static final int HTTP_BAD_REQUEST = 400;
@@ -69,8 +69,8 @@ public class XivelyClient {
 	protected static final int HTTP_INTERNAL_SERVER_ERROR = 500;
 	protected static final int HTTP_SERVICE_UNAVAILABLE = 503;
 
-	private static final Integer DEFAULT_CONNECTION_TIMEOUT = 3000;
-	private static final Integer DEFAULT_SOCKET_TIMEOUT = 3000;
+	private static final Integer DEFAULT_CONNECT_TIMEOUT = 3000;
+	private static final Integer DEFAULT_READ_TIMEOUT = 3000;
 
 	protected final String baseUri;
 
@@ -78,10 +78,9 @@ public class XivelyClient {
 	private String username;
 	private String credentials;
 	private String userAgent = USER_AGENT;
-	private final Integer connectionTimeout;
-	private final Integer socketTimeout;
+	private int connectTimeout;
+	private final int readTimeout;
 
-	private HttpClient httpClient;
 	private FeedService feedService;
 
 	private final int bufferSize = 8192;
@@ -114,8 +113,8 @@ public class XivelyClient {
 	 * @param scheme
 	 */
 	public XivelyClient(String hostname, int port, String scheme) {
-		this(hostname, port, scheme, DEFAULT_SOCKET_TIMEOUT,
-				DEFAULT_CONNECTION_TIMEOUT);
+		this(hostname, port, scheme, DEFAULT_READ_TIMEOUT,
+				DEFAULT_CONNECT_TIMEOUT);
 	}
 
 	/**
@@ -123,11 +122,11 @@ public class XivelyClient {
 	 * @param hostname
 	 * @param port
 	 * @param scheme
-	 * @param socketTimeout
-	 * @param connectionTimeout
+	 * @param readTimeout
+	 * @param connectTimeout
 	 */
 	public XivelyClient(String hostname, int port, String scheme,
-			Integer socketTimeout, Integer connectionTimeout) {
+			int readTimeout, int connectTimeout) {
 		StringBuilder uri = new StringBuilder(scheme);
 		uri.append("://");
 		uri.append(hostname);
@@ -137,11 +136,10 @@ public class XivelyClient {
 		uri.append("/").append(API_VERSION);
 
 		this.baseUri = uri.toString();
-		this.socketTimeout = socketTimeout;
-		this.connectionTimeout = connectionTimeout;
-		logger.info(this.baseUri);
+		this.readTimeout = readTimeout;
+		this.connectTimeout = connectTimeout;
 
-		this.httpClient = buildHttpClient();
+		logger.info("XivelyClient initialized: " + this.baseUri);
 	}
 
 	/**
@@ -186,41 +184,12 @@ public class XivelyClient {
 		return this;
 	}
 
-	/**
-	 * Set the connectionTimeout for the underlying HttpClient instance.
-	 *
-	 * @param connectionTimeout
-	 * @return
-	 */
-	/*
-	 * public XivelyClient setConnectionTimeout(Integer connectionTimeout) { if
-	 * (connectionTimeout != null) { this.connectionTimeout = connectionTimeout;
-	 * } else { this.connectionTimeout = DEFAULT_CONNECTION_TIMEOUT; }
-	 *
-	 * return this; }
-	 *//**
-	 * Set the socket timeout
-	 *
-	 * @param socketTimeout
-	 * @return
-	 */
-	/*
-	 * public XivelyClient setSocketTimeout(Integer socketTimeout) { if
-	 * (socketTimeout != null) { this.socketTimeout = socketTimeout; } else {
-	 * this.socketTimeout = DEFAULT_SOCKET_TIMEOUT; }
-	 *
-	 * return this; }
-	 */
-
-	/**
-	 * Allow setting an arbitrary HttpClient instance which will be used for
-	 * subsequent requests
-	 *
-	 * @param httpClient
-	 * @return
-	 */
-	public XivelyClient setHttpClient(HttpClient httpClient) {
-		this.httpClient = httpClient;
+	public XivelyClient setConnectTimeout(final int connectTimeout) {
+		if (connectTimeout > 0) {
+			this.connectTimeout = connectTimeout;
+		} else {
+			this.connectTimeout = DEFAULT_CONNECT_TIMEOUT;
+		}
 
 		return this;
 	}
@@ -233,22 +202,9 @@ public class XivelyClient {
 	}
 
 	/**
-	 * Build a new HttpClient instance using the timeout variables set on this
-	 * instance.
 	 *
 	 * @return
 	 */
-	protected HttpClient buildHttpClient() {
-		HttpClient hc = new DefaultHttpClient();
-
-		hc.getParams().setParameter(CoreConnectionPNames.SO_TIMEOUT,
-				this.socketTimeout);
-		hc.getParams().setParameter(CoreConnectionPNames.CONNECTION_TIMEOUT,
-				this.connectionTimeout);
-
-		return hc;
-	}
-
 	public FeedService feeds() {
 		if (this.feedService == null) {
 			this.feedService = new FeedService(this);
@@ -263,56 +219,19 @@ public class XivelyClient {
 	 * @throws IOException
 	 */
 	public XivelyResponse get(XivelyRequest request) throws IOException {
-		HttpGet httpGet = new HttpGet(request.generateUri());
+		HttpURLConnection httpResponse = createGet(request.generateUri());
 
-		addHeaders(httpGet);
+		logger.info("GET " + request.generateUri());
 
-		logger.info(httpGet.toString());
-
-		HttpResponse response = httpClient.execute(httpGet);
-
-		final int statusCode = response.getStatusLine().getStatusCode();
+		// implicitly performs the request
+		final int statusCode = httpResponse.getResponseCode();
 
 		if (isOk(statusCode)) {
-			return new XivelyResponse(response, parseDomainObject(request,
-					response));
+			return new XivelyResponse(httpResponse, parseDomainObject(request,
+					httpResponse));
 		} else {
-			throw createException(response);
+			throw createException(httpResponse);
 		}
-	}
-
-	public XivelyResponse post(XivelyRequest request) throws IOException {
-		HttpPost httpPost = new HttpPost(request.generateUri());
-
-		addHeaders(httpPost);
-
-		StringEntity entity = getEntity(request);
-		httpPost.setEntity(entity);
-
-		logger.info(httpPost.toString());
-
-		HttpResponse response = httpClient.execute(httpPost);
-
-		if (isOk(response.getStatusLine().getStatusCode())) {
-			Object id = extractIdFromLocation(response);
-
-			DomainObject obj = (DomainObject) request.getObject();
-			obj.setId(id);
-
-			return new XivelyResponse(response, obj);
-		} else {
-			throw createException(response);
-		}
-	}
-
-	/**
-	 * @param response
-	 * @return
-	 */
-	private String extractIdFromLocation(HttpResponse response) {
-		Header header = response.getFirstHeader(HEADER_LOCATION);
-		String[] tokens = header.getValue().split("/");
-		return tokens[tokens.length - 1];
 	}
 
 	/**
@@ -322,61 +241,201 @@ public class XivelyClient {
 	 * @throws IOException
 	 */
 	public XivelyResponse put(XivelyRequest request) throws IOException {
-		HttpPut httpPut = new HttpPut(request.generateUri());
+		HttpURLConnection httpPut = createPut(request.generateUri());
 
-		addHeaders(httpPut);
+		logger.info("PUT " + request.generateUri());
 
-		StringEntity entity = getEntity(request);
-		httpPut.setEntity(entity);
+		sendObject(httpPut, request.getObject());
 
-		logger.info(httpPut.toString());
-
-		HttpResponse response = httpClient.execute(httpPut);
-
-		if (isOk(response.getStatusLine().getStatusCode())) {
-			return new XivelyResponse(response, request.getObject());
+		if (isOk(httpPut.getResponseCode())) {
+			return new XivelyResponse(httpPut, request.getObject());
 		} else {
-			throw createException(response);
+			throw createException(httpPut);
 		}
+	}
+
+	/**
+	 * Actually send a DomainObject to the remote URL
+	 *
+	 * @param request
+	 * @param object
+	 * @throws IOException
+	 */
+	protected void sendObject(HttpURLConnection request, Object object)
+			throws IOException {
+		request.setDoOutput(true);
+		if (object != null) {
+			request.setRequestProperty(HEADER_CONTENT_TYPE, CONTENT_TYPE_JSON);
+			byte[] data = JsonUtils.toJson(object).getBytes(
+					XivelyConstants.CHARSET_UTF8);
+			request.setFixedLengthStreamingMode(data.length);
+			BufferedOutputStream output = new BufferedOutputStream(
+					request.getOutputStream(), bufferSize);
+			try {
+				output.write(data);
+				output.flush();
+			} finally {
+				try {
+					output.close();
+				} catch (IOException ioe) {
+					// Ignored
+				}
+			}
+		} else {
+			request.setFixedLengthStreamingMode(0);
+			request.setRequestProperty(HEADER_CONTENT_LENGTH, "0");
+		}
+	}
+
+	/**
+	 * @param uri
+	 * @return
+	 * @throws IOException
+	 */
+	private HttpURLConnection createPut(String uri) throws IOException {
+		return createConnection(uri, HTTP_PUT);
+	}
+
+	/**
+	 *
+	 * @param uri
+	 * @return
+	 * @throws IOException
+	 */
+	private HttpURLConnection createPost(String uri) throws IOException {
+		return createConnection(uri, HTTP_POST);
+	}
+
+	/**
+	 *
+	 * @param uri
+	 * @return
+	 * @throws IOException
+	 */
+	private HttpURLConnection createDelete(String uri) throws IOException {
+		return createConnection(uri, HTTP_DELETE);
 	}
 
 	/**
 	 * @param request
 	 * @return
 	 */
-	private StringEntity getEntity(XivelyRequest request) throws IOException {
-		String json = JsonUtils.toJson(request.getObject());
-		return new StringEntity(json);
+	private InputStream createResponseStream(HttpURLConnection request)
+			throws IOException {
+		return request.getInputStream();
 	}
 
 	/**
-	 * @param httpRequest
+	 * @param uri
+	 * @return
+	 * @throws IOException
 	 */
-	private void addHeaders(HttpRequestBase httpRequest) {
-		if (apiKey != null) {
-			httpRequest.addHeader(HEADER_API_KEY, apiKey);
-		}
+	private HttpURLConnection createGet(String uri) throws IOException {
+		return createConnection(uri, HTTP_GET);
+	}
 
-		httpRequest.addHeader(HEADER_USER_AGENT, userAgent);
-		httpRequest.addHeader(HEADER_ACCEPT, XivelyConstants.CONTENT_TYPE_JSON);
+	/**
+	 * Create connection to URI.
+	 *
+	 * @param uri
+	 * @return
+	 */
+	private HttpURLConnection createConnection(String uri) throws IOException {
+		URL url = new URL(uri);
+		return (HttpURLConnection) url.openConnection();
+	}
+
+	/**
+	 * @param uri
+	 * @param method
+	 * @return
+	 * @throws IOException
+	 */
+	private HttpURLConnection createConnection(String uri, String method)
+			throws IOException {
+		HttpURLConnection connection = createConnection(uri);
+		connection.setRequestMethod(method);
+		return configureRequest(connection);
+	}
+
+	/**
+	 * @param connection
+	 * @return
+	 */
+	private HttpURLConnection configureRequest(
+			final HttpURLConnection connection) {
+		if (this.apiKey != null) {
+			connection.setRequestProperty(HEADER_API_KEY, this.apiKey);
+		} else if (this.credentials != null) {
+			connection.setRequestProperty(HEADER_AUTHORIZATION,
+					this.credentials);
+		}
+		connection.setRequestProperty(HEADER_USER_AGENT, this.userAgent);
+		connection.setRequestProperty(HEADER_ACCEPT, "application/json");
+		connection.setReadTimeout(this.readTimeout);
+		connection.setConnectTimeout(this.connectTimeout);
+
+		return connection;
+	}
+
+	// public XivelyResponse post(XivelyRequest request) throws IOException {
+	// HttpPost httpPost = new HttpPost(request.generateUri());
+	//
+	// addHeaders(httpPost);
+	//
+	// StringEntity entity = getEntity(request);
+	// httpPost.setEntity(entity);
+	//
+	// logger.info(httpPost.toString());
+	//
+	// HttpResponse response = httpClient.execute(httpPost);
+	//
+	// if (isOk(response.getStatusLine().getStatusCode())) {
+	// Object id = extractIdFromLocation(response);
+	//
+	// DomainObject obj = (DomainObject) request.getObject();
+	// obj.setId(id);
+	//
+	// return new XivelyResponse(response, obj);
+	// } else {
+	// throw createException(response);
+	// }
+	// }
+
+	/**
+	 * @param response
+	 * @return
+	 */
+	private String extractIdFromLocation(HttpURLConnection response) {
+		String location = response.getHeaderField(HEADER_LOCATION);
+		if (location != null) {
+			String[] tokens = location.split("/");
+			return tokens[tokens.length - 1];
+		} else {
+			return null;
+		}
 	}
 
 	/**
 	 * @param response
 	 * @return
 	 */
-	private IOException createException(HttpResponse response) {
-		if (isError(response.getStatusLine().getStatusCode())) {
-			final ResponseError error;
-			try {
-				error = parseError(response);
-			} catch (IOException e) {
-				return e;
+	private IOException createException(HttpURLConnection response) {
+		try {
+			if (isError(response.getResponseCode())) {
+				final ResponseError error;
+				try {
+					error = parseError(response);
+				} catch (IOException e) {
+					return e;
+				}
+				return new RequestException(error, response.getResponseCode());
 			}
-			return new RequestException(error, response.getStatusLine()
-					.getStatusCode());
+			return new IOException(response.getResponseMessage());
+		} catch (IOException ioe) {
+			return ioe;
 		}
-		return new IOException(response.getStatusLine().getReasonPhrase());
+
 	}
 
 	/**
@@ -387,7 +446,7 @@ public class XivelyClient {
 	 * @throws IllegalStateException
 	 */
 	private Object parseDomainObject(XivelyRequest request,
-			HttpResponse response) throws IOException {
+			HttpURLConnection response) throws IOException {
 		Type type = request.getType();
 		if (type != null) {
 			return parseJson(response, type);
@@ -400,7 +459,8 @@ public class XivelyClient {
 	 * @param response
 	 * @return
 	 */
-	private ResponseError parseError(HttpResponse response) throws IOException {
+	private ResponseError parseError(HttpURLConnection response)
+			throws IOException {
 		return parseJson(response, ResponseError.class);
 	}
 
@@ -412,30 +472,26 @@ public class XivelyClient {
 	 * @return
 	 * @throws IOException
 	 */
-	private <T> T parseJson(HttpResponse response, Type type)
+	private <T> T parseJson(HttpURLConnection response, Type type)
 			throws IOException {
 
-		HttpEntity entity = response.getEntity();
+		BufferedReader reader = new BufferedReader(new InputStreamReader(
+				response.getInputStream()));
 
-		if (entity != null) {
-			BufferedReader reader = new BufferedReader(new InputStreamReader(
-					entity.getContent(), XivelyConstants.CHARSET_UTF8), bufferSize);
-			try {
-				return JsonUtils.fromJson(reader, type);
-			} catch (JsonParseException jpe) {
-				IOException ioe = new IOException(
-						"Parse exception converting JSON to object");
-				ioe.initCause(jpe);
-				throw ioe;
-			} finally {
-				reader.close();
-			}
-		} else {
-			return null;
+		try {
+			return JsonUtils.fromJson(reader, type);
+		} catch (JsonParseException jpe) {
+			IOException ioe = new IOException(
+					"Parse error converting JSON to object");
+			ioe.initCause(jpe);
+			throw ioe;
+		} finally {
+			reader.close();
 		}
 	}
 
 	/**
+	 *
 	 * @param statusCode
 	 * @return
 	 */
@@ -477,9 +533,10 @@ public class XivelyClient {
 	public String toString() {
 		return new ToStringBuilder(this).append("apiKey", this.apiKey)
 				.append("username", this.username)
+				.append("credentials", this.credentials)
 				.append("baseUri", this.baseUri)
 				.append("userAgent", this.userAgent)
-				.append("connectionTimeout", this.connectionTimeout)
-				.append("socketTimeout", this.socketTimeout).toString();
+				.append("readTimeout", this.readTimeout)
+				.append("connectTimeout", this.connectTimeout).toString();
 	}
 }

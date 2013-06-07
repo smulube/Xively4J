@@ -7,8 +7,8 @@ import java.io.IOException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.xively.client.XivelyConstants;
 import com.xively.client.XivelyClient;
+import com.xively.client.XivelyConstants;
 import com.xively.client.http.XivelyRequest;
 import com.xively.client.models.Feed;
 
@@ -62,14 +62,14 @@ public class FeedService extends BaseService {
 		return (Feed) client.put(request).getDomainObject();
 	}
 
-	public Feed createFeed(Feed feed) throws IOException {
-		StringBuilder uri = new StringBuilder(client.getBaseUri());
-		uri.append("/").append(XivelyConstants.SEGMENT_FEEDS);
-
-		XivelyRequest request = createRequest();
-		request.setUri(uri);
-		request.setObject(feed);
-
-		return (Feed) client.post(request).getDomainObject();
-	}
+//	public Feed createFeed(Feed feed) throws IOException {
+//		StringBuilder uri = new StringBuilder(client.getBaseUri());
+//		uri.append("/").append(XivelyConstants.SEGMENT_FEEDS);
+//
+//		XivelyRequest request = createRequest();
+//		request.setUri(uri);
+//		request.setObject(feed);
+//
+//		return (Feed) client.post(request).getDomainObject();
+//	}
 }

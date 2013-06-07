@@ -2,7 +2,7 @@
 // This is part of Xively4J library, it is under the BSD 3-Clause license.
 package com.xively.client.http;
 
-import org.apache.http.HttpResponse;
+import java.net.HttpURLConnection;
 
 
 
@@ -15,10 +15,10 @@ import org.apache.http.HttpResponse;
  */
 public class XivelyResponse {
 
-	private final HttpResponse response;
-	private final Object domainObject;
+	protected final HttpURLConnection response;
+	protected final Object domainObject;
 
-	public XivelyResponse(HttpResponse response, Object domainObject) {
+	public XivelyResponse(HttpURLConnection response, Object domainObject) {
 		this.response = response;
 		this.domainObject = domainObject;
 	}
@@ -36,6 +36,6 @@ public class XivelyResponse {
 	 * @return
 	 */
 	public String getHeader(String name) {
-		return response.getFirstHeader(name).getValue();
+		return response.getHeaderField(name);
 	}
 }
