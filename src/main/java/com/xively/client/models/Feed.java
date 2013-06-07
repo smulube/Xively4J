@@ -242,6 +242,7 @@ public class Feed extends DomainObjectImpl {
 				.append("website", this.website)
 				.append("location", this.location)
 				.append("private", this.isPrivate)
+				.append("tags", this.tags)
 				.toString();
 	}
 }
