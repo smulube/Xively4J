@@ -3,7 +3,7 @@
 package com.xively.client.models;
 
 import java.net.URI;
-import java.util.Collection;
+import java.util.List;
 
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.ToStringBuilder;
@@ -24,171 +24,17 @@ public class Feed extends DomainObjectImpl {
 	private String updatedAt;
 	private String createdAt;
 	private URI website;
-	private Collection<String> tags;
+	private List<String> tags;
 	private Location location;
 	@SerializedName("private")
 	private boolean isPrivate;
-	private Collection<Datastream> datastreams;
-
-	/*
-	 * (non-Javadoc)
-	 *
-	 * @see com.xively.client.models.DomainObject#getId()
-	 */
-	@Override
-	public Object getId() {
-		return id;
-	}
-
-	/* (non-Javadoc)
-	 * @see com.xively.client.models.DomainObject#setId(java.lang.Object)
-	 */
-	@Override
-	public void setId(Object id) {
-		this.id = (Integer) id;
-	}
+	private List<Datastream> datastreams;
 
 	/**
-	 * @return the title
+	 * @param datastream
 	 */
-	public String getTitle() {
-		return title;
-	}
-
-	/**
-	 * @param title
-	 *            the title to set
-	 */
-	public void setTitle(String title) {
-		this.title = title;
-	}
-
-	/**
-	 * @return the description
-	 */
-	public String getDescription() {
-		return description;
-	}
-
-	/**
-	 * @param description
-	 *            the description to set
-	 */
-	public void setDescription(String description) {
-		this.description = description;
-	}
-
-	/**
-	 * @return the updatedAt
-	 */
-	public String getUpdatedAt() {
-		return updatedAt;
-	}
-
-	/**
-	 * @param updatedAt
-	 *            the updatedAt to set
-	 */
-	public void setUpdatedAt(String updatedAt) {
-		this.updatedAt = updatedAt;
-	}
-
-	/**
-	 * @return the createdAt
-	 */
-	public String getCreatedAt() {
-		return createdAt;
-	}
-
-	/**
-	 * @param createdAt
-	 *            the createdAt to set
-	 */
-	public void setCreatedAt(String createdAt) {
-		this.createdAt = createdAt;
-	}
-
-	/**
-	 * @return the website
-	 */
-	public URI getWebsite() {
-		return website;
-	}
-
-	/**
-	 * @param website
-	 *            the website to set
-	 */
-	public void setWebsite(URI website) {
-		this.website = website;
-	}
-
-	/**
-	 * @return the tags
-	 */
-	public Collection<String> getTags() {
-		return tags;
-	}
-
-	/**
-	 * @param tags
-	 *            the tags to set
-	 */
-	public void setTags(Collection<String> tags) {
-		this.tags = tags;
-	}
-
-	/**
-	 * @return the location
-	 */
-	public Location getLocation() {
-		return location;
-	}
-
-	/**
-	 * @param location
-	 *            the location to set
-	 */
-	public void setLocation(Location location) {
-		this.location = location;
-	}
-
-	/**
-	 * @return the isPrivate
-	 */
-	public boolean isPrivate() {
-		return isPrivate;
-	}
-
-	/**
-	 * @param isPrivate
-	 *            the isPrivate to set
-	 */
-	public void setPrivate(boolean isPrivate) {
-		this.isPrivate = isPrivate;
-	}
-
-	/**
-	 * @param id
-	 *            the id to set
-	 */
-	public void setId(Integer id) {
-		this.id = id;
-	}
-
-	/**
-	 * @return the datastreams
-	 */
-	public Collection<Datastream> getDatastreams() {
-		return datastreams;
-	}
-
-	/**
-	 * @param datastreams
-	 *            the datastreams to set
-	 */
-	public void setDatastreams(Collection<Datastream> datastreams) {
-		this.datastreams = datastreams;
+	public void addDatastream(Datastream datastream) {
+		this.datastreams.add(datastream);
 	}
 
 	/*
@@ -215,6 +61,169 @@ public class Feed extends DomainObjectImpl {
 				.append(isPrivate, other.isPrivate).isEquals();
 	}
 
+	/**
+	 * @return the createdAt
+	 */
+	public String getCreatedAt() {
+		return createdAt;
+	}
+
+	/**
+	 * @return the datastreams
+	 */
+	public List<Datastream> getDatastreams() {
+		return datastreams;
+	}
+
+	/**
+	 * @return the description
+	 */
+	public String getDescription() {
+		return description;
+	}
+
+	/*
+	 * (non-Javadoc)
+	 *
+	 * @see com.xively.client.models.DomainObject#getId()
+	 */
+	@Override
+	public Object getId() {
+		return id;
+	}
+
+	/**
+	 * @return the location
+	 */
+	public Location getLocation() {
+		return location;
+	}
+
+	/**
+	 * @return the tags
+	 */
+	public List<String> getTags() {
+		return tags;
+	}
+
+	/**
+	 * @return the title
+	 */
+	public String getTitle() {
+		return title;
+	}
+
+	/**
+	 * @return the updatedAt
+	 */
+	public String getUpdatedAt() {
+		return updatedAt;
+	}
+
+	/**
+	 * @return the website
+	 */
+	public URI getWebsite() {
+		return website;
+	}
+
+	/**
+	 * @return the isPrivate
+	 */
+	public boolean isPrivate() {
+		return isPrivate;
+	}
+
+	/**
+	 * @param createdAt
+	 *            the createdAt to set
+	 */
+	public void setCreatedAt(String createdAt) {
+		this.createdAt = createdAt;
+	}
+
+	/**
+	 * @param datastreams
+	 *            the datastreams to set
+	 */
+	public void setDatastreams(List<Datastream> datastreams) {
+		this.datastreams = datastreams;
+	}
+
+	/**
+	 * @param description
+	 *            the description to set
+	 */
+	public void setDescription(String description) {
+		this.description = description;
+	}
+
+	/**
+	 * @param id
+	 *            the id to set
+	 */
+	public void setId(Integer id) {
+		this.id = id;
+	}
+
+	/*
+	 * (non-Javadoc)
+	 *
+	 * @see com.xively.client.models.DomainObject#setId(java.lang.Object)
+	 */
+	@Override
+	public void setId(Object id) {
+		this.id = (Integer) id;
+	}
+
+	/**
+	 * @param location
+	 *            the location to set
+	 */
+	public void setLocation(Location location) {
+		this.location = location;
+	}
+
+	/**
+	 * @param isPrivate
+	 *            the isPrivate to set
+	 */
+	public void setPrivate(boolean isPrivate) {
+		this.isPrivate = isPrivate;
+	}
+
+	/**
+	 * @param tags
+	 *            the tags to set
+	 */
+	public void setTags(List<String> tags) {
+		this.tags = tags;
+	}
+
+	/**
+	 * @param title
+	 *            the title to set
+	 */
+	public void setTitle(String title) {
+		this.title = title;
+	}
+
+	/**
+	 * @param updatedAt
+	 *            the updatedAt to set
+	 */
+	public void setUpdatedAt(String updatedAt) {
+		this.updatedAt = updatedAt;
+	}
+
+	/**
+	 * @param website
+	 *            the website to set
+	 */
+	public void setWebsite(URI website) {
+		this.website = website;
+	}
+
 	/*
 	 * (non-Javadoc)
 	 *
@@ -222,16 +231,14 @@ public class Feed extends DomainObjectImpl {
 	 */
 	@Override
 	public String toString() {
-		return new ToStringBuilder(this)
-				.append("id", this.id)
+		return new ToStringBuilder(this).append("id", this.id)
 				.append("title", this.title)
 				.append("description", this.description)
 				.append("updatedAt", this.updatedAt)
 				.append("createdAt", this.createdAt)
 				.append("website", this.website)
 				.append("location", this.location)
-				.append("private", this.isPrivate)
-				.append("tags", this.tags)
+				.append("private", this.isPrivate).append("tags", this.tags)
 				.toString();
 	}
 }

@@ -15,8 +15,7 @@ import org.apache.commons.lang3.builder.ToStringBuilder;
 public class Location implements Serializable {
 
 	public enum Exposure {
-		INDOOR("indoor"),
-		OUTDOOR("outdoor");
+		INDOOR("indoor"), OUTDOOR("outdoor");
 
 		private final String value;
 
@@ -27,11 +26,14 @@ public class Location implements Serializable {
 		public String getValue() {
 			return value;
 		}
+
+		public static Exposure fromString(String value) {
+			return Exposure.valueOf(value.toUpperCase());
+		}
 	}
 
 	public enum Disposition {
-		FIXED("fixed"),
-		MOBILE("mobile");
+		FIXED("fixed"), MOBILE("mobile");
 
 		private final String value;
 
@@ -42,11 +44,14 @@ public class Location implements Serializable {
 		public String getValue() {
 			return value;
 		}
+
+		public static Disposition fromString(String value) {
+			return Disposition.valueOf(value.toUpperCase());
+		}
 	}
 
 	public enum Domain {
-		PHYSICAL("physical"),
-		VIRTUAL("virtual");
+		PHYSICAL("physical"), VIRTUAL("virtual");
 
 		private final String value;
 
@@ -56,6 +61,16 @@ public class Location implements Serializable {
 
 		public String getValue() {
 			return value;
+		}
+
+		/**
+		 * Case insensitive version of valueOf.
+		 *
+		 * @param value
+		 * @return
+		 */
+		public static Domain fromString(String value) {
+			return Domain.valueOf(value.toUpperCase());
 		}
 	}
 
@@ -80,7 +95,8 @@ public class Location implements Serializable {
 	}
 
 	/**
-	 * @param name the name to set
+	 * @param name
+	 *            the name to set
 	 */
 	public void setName(String name) {
 		this.name = name;
@@ -94,7 +110,8 @@ public class Location implements Serializable {
 	}
 
 	/**
-	 * @param latitude the latitude to set
+	 * @param latitude
+	 *            the latitude to set
 	 */
 	public void setLatitude(double latitude) {
 		this.latitude = latitude;
@@ -108,7 +125,8 @@ public class Location implements Serializable {
 	}
 
 	/**
-	 * @param longitude the longitude to set
+	 * @param longitude
+	 *            the longitude to set
 	 */
 	public void setLongitude(double longitude) {
 		this.longitude = longitude;
@@ -122,7 +140,8 @@ public class Location implements Serializable {
 	}
 
 	/**
-	 * @param elevation the elevation to set
+	 * @param elevation
+	 *            the elevation to set
 	 */
 	public void setElevation(String elevation) {
 		this.elevation = elevation;
@@ -136,7 +155,8 @@ public class Location implements Serializable {
 	}
 
 	/**
-	 * @param exposure the exposure to set
+	 * @param exposure
+	 *            the exposure to set
 	 */
 	public void setExposure(Exposure exposure) {
 		this.exposure = exposure;
@@ -150,7 +170,8 @@ public class Location implements Serializable {
 	}
 
 	/**
-	 * @param disposition the disposition to set
+	 * @param disposition
+	 *            the disposition to set
 	 */
 	public void setDisposition(Disposition disposition) {
 		this.disposition = disposition;
@@ -164,7 +185,8 @@ public class Location implements Serializable {
 	}
 
 	/**
-	 * @param domain the domain to set
+	 * @param domain
+	 *            the domain to set
 	 */
 	public void setDomain(Domain domain) {
 		this.domain = domain;
@@ -172,48 +194,41 @@ public class Location implements Serializable {
 
 	@Override
 	public int hashCode() {
-		return new HashCodeBuilder(23,  91).
-				append(name).
-				append(latitude).
-				append(longitude).
-				append(elevation).
-				append(exposure).
-				append(disposition).
-				append(domain).toHashCode();
+		return new HashCodeBuilder(23, 91).append(name).append(latitude)
+				.append(longitude).append(elevation).append(exposure)
+				.append(disposition).append(domain).toHashCode();
 	}
 
 	@Override
 	public boolean equals(Object obj) {
-		if (obj == null) { return false; }
-		if (this == obj) { return true; }
+		if (obj == null) {
+			return false;
+		}
+		if (this == obj) {
+			return true;
+		}
 		if (obj.getClass() != getClass()) {
 			return false;
 		}
 
 		Location other = (Location) obj;
 
-		return new EqualsBuilder().
-				append(name, other.name).
-				append(latitude, other.latitude).
-				append(longitude, other.longitude).
-				append(elevation, other.elevation).
-				append(exposure, other.exposure).
-				append(disposition, other.disposition).
-				append(domain, other.domain)
-				.isEquals();
+		return new EqualsBuilder().append(name, other.name)
+				.append(latitude, other.latitude)
+				.append(longitude, other.longitude)
+				.append(elevation, other.elevation)
+				.append(exposure, other.exposure)
+				.append(disposition, other.disposition)
+				.append(domain, other.domain).isEquals();
 	}
 
 	@Override
 	public String toString() {
-		return new ToStringBuilder(this).
-				append("name", name).
-				append("latitude", latitude).
-				append("longitude", longitude).
-				append("elevation", elevation).
-				append("exposure", exposure).
-				append("disposition", disposition).
-				append("domain", domain).
-				toString();
+		return new ToStringBuilder(this).append("name", name)
+				.append("latitude", latitude).append("longitude", longitude)
+				.append("elevation", elevation).append("exposure", exposure)
+				.append("disposition", disposition).append("domain", domain)
+				.toString();
 	}
 
 }

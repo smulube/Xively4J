@@ -6,7 +6,6 @@ import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 
-
 /**
  * @author sam
  *
@@ -29,6 +28,18 @@ public class Unit {
 		public String getValue() {
 			return value;
 		}
+
+		public static IFCClassification fromString(String value) {
+			if (value != null) {
+				for (IFCClassification classification : IFCClassification.values()) {
+					if (value.equalsIgnoreCase(classification.value)) {
+						return classification;
+					}
+				}
+			}
+			throw new IllegalArgumentException(
+					"No IFCClassification with value: " + value + " found.");
+		}
 	}
 
 	private String symbol;
@@ -43,7 +54,8 @@ public class Unit {
 	}
 
 	/**
-	 * @param type the type to set
+	 * @param type
+	 *            the type to set
 	 */
 
 	public void setType(IFCClassification type) {
@@ -58,7 +70,8 @@ public class Unit {
 	}
 
 	/**
-	 * @param symbol the symbol to set
+	 * @param symbol
+	 *            the symbol to set
 	 */
 	public void setSymbol(String symbol) {
 		this.symbol = symbol;
@@ -72,7 +85,8 @@ public class Unit {
 	}
 
 	/**
-	 * @param label the label to set
+	 * @param label
+	 *            the label to set
 	 */
 	public void setLabel(String label) {
 		this.label = label;
@@ -80,36 +94,31 @@ public class Unit {
 
 	@Override
 	public int hashCode() {
-		return new HashCodeBuilder(67, 43).
-				append(symbol).
-				append(label).
-				append(type).
-				toHashCode();
+		return new HashCodeBuilder(67, 43).append(symbol).append(label)
+				.append(type).toHashCode();
 	}
 
 	@Override
 	public boolean equals(Object obj) {
-		if (obj == null) { return false; }
-		if (this == obj) { return true; }
+		if (obj == null) {
+			return false;
+		}
+		if (this == obj) {
+			return true;
+		}
 		if (obj.getClass() != getClass()) {
 			return false;
 		}
 
 		Unit other = (Unit) obj;
 
-		return new EqualsBuilder().
-				append(symbol, other.symbol).
-				append(label, other.label).
-				append(type, other.type).
-				isEquals();
+		return new EqualsBuilder().append(symbol, other.symbol)
+				.append(label, other.label).append(type, other.type).isEquals();
 	}
 
 	@Override
 	public String toString() {
-		return new ToStringBuilder(this).
-				append("symbol", symbol).
-				append("label", label).
-				append("type", type).
-				toString();
+		return new ToStringBuilder(this).append("symbol", symbol)
+				.append("label", label).append("type", type).toString();
 	}
 }

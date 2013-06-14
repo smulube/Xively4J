@@ -2,9 +2,10 @@
 // This is part of Xively4J library, it is under the BSD 3-Clause license.
 package com.xively.client.models;
 
-import java.util.Collection;
+import java.util.List;
 
 import org.apache.commons.lang3.builder.EqualsBuilder;
+import org.apache.commons.lang3.builder.ToStringBuilder;
 
 /**
  * @author sam
@@ -19,145 +20,25 @@ public class Datastream extends DomainObjectImpl {
 	private String current_value;
 	private double min_value;
 	private double max_value;
-	private Collection<String> tags;
+	private List<String> tags;
 	private Unit unit;
-	private Collection<Datapoint> datapoints;
+	private List<Datapoint> datapoints;
 
-	@Override
-	public Object getId() {
-		return id;
-	}
-
-	/* (non-Javadoc)
-	 * @see com.xively.client.models.DomainObject#setId(java.lang.Object)
+	/**
+	 * Default constructor
 	 */
-	@Override
-	public void setId(Object id) {
-		this.id = (String) id;
+	public Datastream() {
 	}
 
 	/**
-	 * @return the at
+	 * @param id
+	 * @param current_value
+	 * @param at
 	 */
-	public String getAt() {
-		return at;
-	}
-
-	/**
-	 * @param at the at to set
-	 */
-	public void setAt(String at) {
-		this.at = at;
-	}
-
-	/**
-	 * @return the current_value
-	 */
-	public String getCurrentValue() {
-		return current_value;
-	}
-
-	/**
-	 * @param current_value the current_value to set
-	 */
-	public void setCurrentValue(String current_value) {
-		this.current_value = current_value;
-	}
-
-	/**
-	 * @return the min_value
-	 */
-	public double getMinValue() {
-		return min_value;
-	}
-
-	/**
-	 * @param min_value the min_value to set
-	 */
-	public void setMinValue(String min_value) {
-		if (min_value != null) {
-			this.setMinValue(Double.valueOf(min_value).doubleValue());
-		}
-	}
-
-	/**
-	 *
-	 * @param min_value the min_value to set
-	 */
-	public void setMinValue(double min_value) {
-		this.min_value = min_value;
-	}
-
-	/**
-	 * @return the max_value
-	 */
-	public double getMaxValue() {
-		return max_value;
-	}
-
-	/**
-	 * @param max_value the max_value to set as a String
-	 */
-	public void setMaxValue(String max_value) {
-		if (max_value != null) {
-			setMaxValue(Double.valueOf(max_value).doubleValue());
-		}
-	}
-
-	/**
-	 * @param max_value the max_value to set
-	 */
-	public void setMaxValue(double max_value) {
-		this.max_value = max_value;
-	}
-
-	/**
-	 * @return the tags
-	 */
-	public Collection<String> getTags() {
-		return tags;
-	}
-
-	/**
-	 * @param tags the tags to set
-	 */
-	public void setTags(Collection<String> tags) {
-		this.tags = tags;
-	}
-
-	/**
-	 * @return the unit
-	 */
-	public Unit getUnit() {
-		return unit;
-	}
-
-	/**
-	 * @param unit the unit to set
-	 */
-	public void setUnit(Unit unit) {
-		this.unit = unit;
-	}
-
-	/**
-	 * @return the datapoints
-	 */
-	public Collection<Datapoint> getDatapoints() {
-		return datapoints;
-	}
-
-	/**
-	 * @param datapoints the datapoints to set
-	 */
-	public void setDatapoints(Collection<Datapoint> datapoints) {
-		this.datapoints = datapoints;
-	}
-
-	/**
-	 * @param id the id to set
-	 */
-	public void setId(String id) {
+	public Datastream(String id, String current_value, String at) {
 		this.id = id;
+		this.current_value = current_value;
+		this.at = at;
 	}
 
 	@Override
@@ -168,14 +49,171 @@ public class Datastream extends DomainObjectImpl {
 
 		Datastream other = (Datastream) obj;
 
-		return new EqualsBuilder()
-				.append(at, other.at)
+		return new EqualsBuilder().append(at, other.at)
 				.append(current_value, other.current_value)
 				.append(min_value, other.min_value)
-				.append(max_value, other.max_value)
-				.append(tags, other.tags)
-				.append(unit, other.unit)
-				.append(datapoints, other.datapoints)
+				.append(max_value, other.max_value).append(tags, other.tags)
+				.append(unit, other.unit).append(datapoints, other.datapoints)
 				.isEquals();
+	}
+
+	/**
+	 * @return the at
+	 */
+	public String getAt() {
+		return at;
+	}
+
+	/**
+	 * @return the current_value
+	 */
+	public String getCurrentValue() {
+		return current_value;
+	}
+
+	/**
+	 * @return the datapoints
+	 */
+	public List<Datapoint> getDatapoints() {
+		return datapoints;
+	}
+
+	@Override
+	public Object getId() {
+		return id;
+	}
+
+	/**
+	 * @return the max_value
+	 */
+	public double getMaxValue() {
+		return max_value;
+	}
+
+	/**
+	 * @return the min_value
+	 */
+	public double getMinValue() {
+		return min_value;
+	}
+
+	/**
+	 * @return the tags
+	 */
+	public List<String> getTags() {
+		return tags;
+	}
+
+	/**
+	 * @return the unit
+	 */
+	public Unit getUnit() {
+		return unit;
+	}
+
+	/**
+	 * @param at
+	 *            the at to set
+	 */
+	public void setAt(String at) {
+		this.at = at;
+	}
+
+	/**
+	 * @param current_value
+	 *            the current_value to set
+	 */
+	public void setCurrentValue(String current_value) {
+		this.current_value = current_value;
+	}
+
+	/**
+	 * @param datapoints
+	 *            the datapoints to set
+	 */
+	public void setDatapoints(List<Datapoint> datapoints) {
+		this.datapoints = datapoints;
+	}
+
+	/*
+	 * (non-Javadoc)
+	 *
+	 * @see com.xively.client.models.DomainObject#setId(java.lang.Object)
+	 */
+	@Override
+	public void setId(Object id) {
+		this.id = (String) id;
+	}
+
+	/**
+	 * @param id
+	 *            the id to set
+	 */
+	public void setId(String id) {
+		this.id = id;
+	}
+
+	/**
+	 * @param max_value
+	 *            the max_value to set
+	 */
+	public void setMaxValue(double max_value) {
+		this.max_value = max_value;
+	}
+
+	/**
+	 * @param max_value
+	 *            the max_value to set as a String
+	 */
+	public void setMaxValue(String max_value) {
+		if (max_value != null) {
+			setMaxValue(Double.valueOf(max_value).doubleValue());
+		}
+	}
+
+	/**
+	 *
+	 * @param min_value
+	 *            the min_value to set
+	 */
+	public void setMinValue(double min_value) {
+		this.min_value = min_value;
+	}
+
+	/**
+	 * @param min_value
+	 *            the min_value to set
+	 */
+	public void setMinValue(String min_value) {
+		if (min_value != null) {
+			this.setMinValue(Double.valueOf(min_value).doubleValue());
+		}
+	}
+
+	/**
+	 * @param tags
+	 *            the tags to set
+	 */
+	public void setTags(List<String> tags) {
+		this.tags = tags;
+	}
+
+	/**
+	 * @param unit
+	 *            the unit to set
+	 */
+	public void setUnit(Unit unit) {
+		this.unit = unit;
+	}
+
+	/*
+	 * (non-Javadoc)
+	 *
+	 * @see java.lang.Object#toString()
+	 */
+	@Override
+	public String toString() {
+		return new ToStringBuilder(this).append("id", this.id)
+				.append("current_value", this.current_value).toString();
 	}
 }

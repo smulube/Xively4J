@@ -21,6 +21,23 @@ public class Datapoint extends DomainObjectImpl {
 	private String at;
 
 	/**
+	 * Default constructor
+	 */
+	public Datapoint() {
+	}
+
+	/**
+	 * Convenience constructor.
+	 *
+	 * @param value
+	 * @param at
+	 */
+	public Datapoint(String value, String at) {
+		this.value = value;
+		this.at = at;
+	}
+
+	/**
 	 * @return the value
 	 */
 	public String getValue() {

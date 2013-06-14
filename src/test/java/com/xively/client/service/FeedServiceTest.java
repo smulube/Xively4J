@@ -74,6 +74,7 @@ public class FeedServiceTest {
 		Feed feed = this.service.getFeed(123);
 
 		assertEquals(123, feed.getId());
+		assertEquals("My title", feed.getTitle());
 	}
 
 }
