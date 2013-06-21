@@ -33,6 +33,14 @@ public class XivelyRequestTest {
 	}
 
 	@Test
+	public void canSetUriAsStringBuilder() {
+		StringBuilder sb = new StringBuilder();
+		sb.append("http://example.com");
+		this.request.setUri(sb);
+		assertEquals("http://example.com", this.request.getUri());
+	}
+
+	@Test
 	public void canSetGetType() {
 		this.request.setType(Feed.class);
 		assertEquals(Feed.class, this.request.getType());

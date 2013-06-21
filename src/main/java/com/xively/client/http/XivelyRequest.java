@@ -38,6 +38,15 @@ public class XivelyRequest {
 
 	/**
 	 *
+	 * @param sb
+	 * @return
+	 */
+	public XivelyRequest setUri(StringBuilder sb) {
+		return setUri(sb.toString());
+	}
+
+	/**
+	 *
 	 * @return
 	 */
 	public String getUri() {
