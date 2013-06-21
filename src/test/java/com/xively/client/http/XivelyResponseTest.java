@@ -3,8 +3,7 @@
 package com.xively.client.http;
 
 import static org.junit.Assert.assertEquals;
-import static org.mockito.Matchers.anyString;
-import static org.mockito.Mockito.mock;
+import static org.junit.Assert.assertNull;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
@@ -12,6 +11,9 @@ import java.net.HttpURLConnection;
 
 import org.junit.Before;
 import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.mockito.Mock;
+import org.mockito.runners.MockitoJUnitRunner;
 
 import com.xively.client.models.Feed;
 
@@ -19,9 +21,12 @@ import com.xively.client.models.Feed;
  * @author sam
  *
  */
+@RunWith(MockitoJUnitRunner.class)
 public class XivelyResponseTest {
 
+	@Mock
 	private HttpURLConnection connection;
+
 	private XivelyResponse response;
 	private Feed feed;
 
@@ -30,22 +35,37 @@ public class XivelyResponseTest {
 	 */
 	@Before
 	public void setUp() throws Exception {
-		this.connection = mock(HttpURLConnection.class);
-		when(this.connection.getHeaderField(anyString())).thenReturn(
-				"http://example.com");
-
 		this.feed = new Feed();
 		this.response = new XivelyResponse(connection, feed);
 	}
 
 	@Test
-	public void testDomainObject() {
+	public void domainObject() {
 		assertEquals(this.feed, this.response.getDomainObject());
 	}
 
 	@Test
-	public void testGetHeader() {
+	public void getHeader() {
+		when(this.connection.getHeaderField("Location")).thenReturn("http://example.com");
 		assertEquals("http://example.com", this.response.getHeader("Location"));
 		verify(this.connection).getHeaderField("Location");
+	}
+
+	@Test
+	public void idFromLocation() {
+		when(this.connection.getHeaderField("Location")).thenReturn("http://api.xively.com/v2/feeds/123");
+		assertEquals("123", this.response.getIdFromLocation());
+	}
+
+	@Test
+	public void idFromLocationWhenLocationNull() {
+		when(this.connection.getHeaderField("Location")).thenReturn(null);
+		assertNull(this.response.getIdFromLocation());
+	}
+
+	@Test
+	public void idFromLocationWhenLocationHasParams() {
+		when(this.connection.getHeaderField("Location")).thenReturn("http://api.xively.com/v2/feeds/123?param=true");
+		assertEquals("123", this.response.getIdFromLocation());
 	}
 }

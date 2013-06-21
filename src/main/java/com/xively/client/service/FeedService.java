@@ -29,50 +29,98 @@ public class FeedService extends BaseService {
 		super(client);
 	}
 
-	public Feed getFeed(Integer id) throws IOException {
+	/**
+	 * Throw {@link IllegalArgumentException} if id is null or empty.
+	 * @param id
+	 */
+	private void checkFeedId(String id) {
 		if (id == null) {
 			throw new IllegalArgumentException("Feed ID cannot be null");
 		}
+
+		if (id.length() == 0) {
+			throw new IllegalArgumentException("Feed ID cannot be empty");
+		}
+	}
+
+	/**
+	 *
+	 * @param id
+	 * @return
+	 * @throws IOException
+	 */
+	public Feed getFeed(String id) throws IOException {
+		checkFeedId(id);
 
 		StringBuilder uri = new StringBuilder(client.getBaseUri());
 		uri.append("/").append(XivelyConstants.SEGMENT_FEEDS);
 		uri.append("/").append(id);
 
-		XivelyRequest request = createRequest();
-		request.setUri(uri.toString());
-		request.setType(Feed.class);
+		XivelyRequest request = new XivelyRequest(); //createRequest();
+		request.setUri(uri.toString()).setType(Feed.class);
 
 		XivelyResponse response = client.get(request);
 
 		return (Feed) response.getDomainObject();
 	}
 
+	/**
+	 *
+	 * @param feed
+	 * @return
+	 * @throws IOException
+	 */
 	public Feed updateFeed(Feed feed) throws IOException {
-		Integer id = (Integer) feed.getId();
-
-		if (id == null) {
-			throw new IllegalArgumentException("Feed ID cannot be null");
+		if (feed == null) {
+			throw new IllegalArgumentException("Feed cannot be null");
 		}
+
+		String id = feed.getId();
+
+		checkFeedId(id);
 
 		StringBuilder uri = new StringBuilder(client.getBaseUri());
 		uri.append("/").append(XivelyConstants.SEGMENT_FEEDS);
 		uri.append("/").append(id);
 
-		XivelyRequest request = createRequest();
-		request.setUri(uri.toString());
+		XivelyRequest request = new XivelyRequest();
+		request.setUri(uri);
 		request.setObject(feed);
 
 		return (Feed) client.put(request).getDomainObject();
 	}
 
-//	public Feed createFeed(Feed feed) throws IOException {
-//		StringBuilder uri = new StringBuilder(client.getBaseUri());
-//		uri.append("/").append(XivelyConstants.SEGMENT_FEEDS);
-//
-//		XivelyRequest request = createRequest();
-//		request.setUri(uri);
-//		request.setObject(feed);
-//
-//		return (Feed) client.post(request).getDomainObject();
-//	}
+	/**
+	 *
+	 * @param id
+	 * @throws IOException
+	 */
+	public void deleteFeed(String id) throws IOException {
+		checkFeedId(id);
+
+		StringBuilder uri = new StringBuilder(client.getBaseUri());
+		uri.append("/").append(XivelyConstants.SEGMENT_FEEDS);
+		uri.append("/").append(id);
+
+		XivelyRequest request = new XivelyRequest();
+		request.setUri(uri);
+
+		client.delete(request);
+	}
+
+	public Feed createFeed(Feed feed) throws IOException {
+		if (feed == null) {
+			throw new IllegalArgumentException("Feed cannot be null");
+		}
+
+		StringBuilder uri = new StringBuilder(client.getBaseUri());
+		uri.append("/").append(XivelyConstants.SEGMENT_FEEDS);
+
+		XivelyRequest request = new XivelyRequest();
+		request.setUri(uri).setObject(feed);
+
+		XivelyResponse response = client.post(request);
+
+		return (Feed) client.post(request).getDomainObject();
+	}
 }

@@ -28,20 +28,25 @@ public class DatapointTest {
 	}
 
 	@Test
-	public void testDefaultInstantiation() {
+	public void defaultInstantiation() {
 		assertEquals("12", this.datapoint1.getValue());
 		assertEquals("2013-03-03T12:22:29.192192Z", this.datapoint1.getAt());
 	}
 
 	@Test
-	public void testConvenienceInstantiation() {
+	public void convenienceInstantiation() {
 		Datapoint dp = new Datapoint("13.2", "2013-03-02T00:00:00Z");
 		assertEquals("13.2", dp.getValue());
 		assertEquals("2013-03-02T00:00:00Z", dp.getAt());
 	}
 
 	@Test
-	public void testEqualsAndHashCode() {
+	public void getIdReturnsAt() {
+		assertEquals(this.datapoint1.getAt(), this.datapoint1.getId());
+	}
+
+	@Test
+	public void equalsAndHashCode() {
 		Datapoint dp = new Datapoint();
 		dp.setAt(this.datapoint1.getAt());
 		assertEquals(dp, this.datapoint1);
@@ -49,7 +54,7 @@ public class DatapointTest {
 	}
 
 	@Test
-	public void testDeepEquals() {
+	public void deepEquals() {
 		Datapoint dp = new Datapoint();
 		assertFalse(this.datapoint1.deepEquals(dp));
 		dp.setAt(this.datapoint1.getAt());
@@ -58,7 +63,7 @@ public class DatapointTest {
 	}
 
 	@Test
-	public void testUsefulToStringOutput() {
+	public void usefulToStringOutput() {
 		assertTrue(this.datapoint1.toString().matches(".*Datapoint.*"));
 		assertTrue(this.datapoint1.toString().matches(".*at=2013-03-03T12:22:29.192192Z.*"));
 		assertTrue(this.datapoint1.toString().matches(".*value=12.*"));

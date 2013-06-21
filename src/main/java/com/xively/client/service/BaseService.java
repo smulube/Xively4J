@@ -3,7 +3,6 @@
 package com.xively.client.service;
 
 import com.xively.client.XivelyClient;
-import com.xively.client.http.XivelyRequest;
 
 /**
  * @author sam
@@ -12,10 +11,18 @@ import com.xively.client.http.XivelyRequest;
 public abstract class BaseService {
 	protected final XivelyClient client;
 
+	/**
+	 * Default constructor.
+	 */
 	public BaseService() {
 		this(new XivelyClient());
 	}
 
+	/**
+	 * Constructor with explicit client instance.
+	 *
+	 * @param client
+	 */
 	public BaseService(XivelyClient client) {
 		if (client == null) {
 			throw new IllegalArgumentException("XivelyClient cannot be null");
@@ -23,8 +30,12 @@ public abstract class BaseService {
 		this.client = client;
 	}
 
-	public XivelyRequest createRequest() {
-		return new XivelyRequest();
+	/**
+	 * Return the client instance.
+	 *
+	 * @return
+	 */
+	public XivelyClient getClient() {
+		return this.client;
 	}
-
 }

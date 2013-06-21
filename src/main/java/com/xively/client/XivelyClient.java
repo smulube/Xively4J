@@ -43,7 +43,7 @@ public class XivelyClient {
 
 	protected static final String HEADER_CONTENT_TYPE = "Content-Type";
 
-	protected static final String HEADER_LOCATION = "Location";
+	public static final String HEADER_LOCATION = "Location";
 
 	protected static final String HEADER_CONTENT_LENGTH = "Content-Length";
 
@@ -219,18 +219,18 @@ public class XivelyClient {
 	 * @throws IOException
 	 */
 	public XivelyResponse get(XivelyRequest request) throws IOException {
-		HttpURLConnection httpResponse = createGet(request.generateUri());
+		HttpURLConnection httpGet = createGet(request.generateUri());
 
-		logger.info("GET " + request.generateUri());
+		logger.debug("GET " + request.generateUri());
 
 		// implicitly performs the request
-		final int statusCode = httpResponse.getResponseCode();
+		final int statusCode = httpGet.getResponseCode();
 
 		if (isOk(statusCode)) {
-			return new XivelyResponse(httpResponse, parseDomainObject(request,
-					httpResponse));
+			return new XivelyResponse(httpGet, parseDomainObject(request,
+					httpGet));
 		} else {
-			throw createException(httpResponse);
+			throw createException(httpGet);
 		}
 	}
 
@@ -243,7 +243,7 @@ public class XivelyClient {
 	public XivelyResponse put(XivelyRequest request) throws IOException {
 		HttpURLConnection httpPut = createPut(request.generateUri());
 
-		logger.info("PUT " + request.generateUri());
+		logger.debug("PUT " + request.generateUri());
 
 		sendObject(httpPut, request.getObject());
 
@@ -251,6 +251,44 @@ public class XivelyClient {
 			return new XivelyResponse(httpPut, request.getObject());
 		} else {
 			throw createException(httpPut);
+		}
+	}
+
+	/**
+	 *
+	 * @param request
+	 * @return
+	 * @throws IOException
+	 */
+	public XivelyResponse post(XivelyRequest request) throws IOException {
+		HttpURLConnection httpPost = createPost(request.generateUri());
+
+		logger.debug("POST " + request.generateUri());
+
+		sendObject(httpPost, request.getObject());
+
+		if (isOk(httpPost.getResponseCode())) {
+			return new XivelyResponse(httpPost, request.getObject());
+		} else {
+			throw createException(httpPost);
+		}
+	}
+
+	/**
+	 *
+	 * @param request
+	 * @throws IOException
+	 */
+	public void delete(XivelyRequest request) throws IOException {
+		HttpURLConnection httpDelete = createDelete(request.generateUri());
+
+		logger.info("DELETE " + request.generateUri());
+
+		// implicitly makes the request
+		final int statusCode = httpDelete.getResponseCode();
+
+		if (!isOk(statusCode)) {
+			throw createException(httpDelete);
 		}
 	}
 

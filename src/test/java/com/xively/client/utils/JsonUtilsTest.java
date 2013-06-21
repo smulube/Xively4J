@@ -59,7 +59,7 @@ public class JsonUtilsTest {
 		datastreams.add(datastream);
 
 		this.feed = new Feed();
-		this.feed.setId(123);
+		this.feed.setId("123");
 		this.feed.setTitle("Office environment");
 		this.feed.setDescription("This is a description");
 		this.feed.setDatastreams(datastreams);
