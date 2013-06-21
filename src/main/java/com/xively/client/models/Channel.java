@@ -11,7 +11,7 @@ import org.apache.commons.lang3.builder.ToStringBuilder;
  * @author sam
  *
  */
-public class Datastream extends DomainObjectImpl {
+public class Channel extends DomainObjectImpl {
 
 	private static final long serialVersionUID = -4713767723173762280L;
 
@@ -26,7 +26,7 @@ public class Datastream extends DomainObjectImpl {
 	/**
 	 * Default constructor
 	 */
-	public Datastream() {
+	public Channel() {
 	}
 
 	/**
@@ -34,7 +34,7 @@ public class Datastream extends DomainObjectImpl {
 	 * @param current_value
 	 * @param at
 	 */
-	public Datastream(String id, String current_value, String at) {
+	public Channel(String id, String current_value, String at) {
 		this.id = id;
 		this.current_value = current_value;
 		this.at = at;
@@ -46,7 +46,7 @@ public class Datastream extends DomainObjectImpl {
 			return false;
 		}
 
-		Datastream other = (Datastream) obj;
+		Channel other = (Channel) obj;
 
 		return new EqualsBuilder().append(at, other.at)
 				.append(current_value, other.current_value)

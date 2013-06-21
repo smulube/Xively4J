@@ -30,9 +30,6 @@ public class FeedServiceTest {
 	@Mock
 	private XivelyClient client;
 
-	//@Mock
-	//private XivelyRequest request;
-
 	@Mock
 	private XivelyResponse response;
 

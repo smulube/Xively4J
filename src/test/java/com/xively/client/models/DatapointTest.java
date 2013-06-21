@@ -15,22 +15,22 @@ import org.junit.Test;
  */
 public class DatapointTest {
 
-	private Datapoint datapoint1;
+	private Datapoint datapoint;
 
 	/**
 	 * @throws java.lang.Exception
 	 */
 	@Before
 	public void setUp() throws Exception {
-		this.datapoint1 = new Datapoint();
-		this.datapoint1.setValue("12");
-		this.datapoint1.setAt("2013-03-03T12:22:29.192192Z");
+		this.datapoint = new Datapoint();
+		this.datapoint.setValue("12");
+		this.datapoint.setAt("2013-03-03T12:22:29.192192Z");
 	}
 
 	@Test
 	public void defaultInstantiation() {
-		assertEquals("12", this.datapoint1.getValue());
-		assertEquals("2013-03-03T12:22:29.192192Z", this.datapoint1.getAt());
+		assertEquals("12", this.datapoint.getValue());
+		assertEquals("2013-03-03T12:22:29.192192Z", this.datapoint.getAt());
 	}
 
 	@Test
@@ -42,30 +42,30 @@ public class DatapointTest {
 
 	@Test
 	public void getIdReturnsAt() {
-		assertEquals(this.datapoint1.getAt(), this.datapoint1.getId());
+		assertEquals(this.datapoint.getAt(), this.datapoint.getId());
 	}
 
 	@Test
 	public void equalsAndHashCode() {
 		Datapoint dp = new Datapoint();
-		dp.setAt(this.datapoint1.getAt());
-		assertEquals(dp, this.datapoint1);
-		assertEquals(dp.hashCode(), this.datapoint1.hashCode());
+		dp.setAt(this.datapoint.getAt());
+		assertEquals(dp, this.datapoint);
+		assertEquals(dp.hashCode(), this.datapoint.hashCode());
 	}
 
 	@Test
 	public void deepEquals() {
 		Datapoint dp = new Datapoint();
-		assertFalse(this.datapoint1.deepEquals(dp));
-		dp.setAt(this.datapoint1.getAt());
-		dp.setValue(this.datapoint1.getValue());
-		assertTrue(this.datapoint1.deepEquals(dp));
+		assertFalse(this.datapoint.deepEquals(dp));
+		dp.setAt(this.datapoint.getAt());
+		dp.setValue(this.datapoint.getValue());
+		assertTrue(this.datapoint.deepEquals(dp));
 	}
 
 	@Test
 	public void usefulToStringOutput() {
-		assertTrue(this.datapoint1.toString().matches(".*Datapoint.*"));
-		assertTrue(this.datapoint1.toString().matches(".*at=2013-03-03T12:22:29.192192Z.*"));
-		assertTrue(this.datapoint1.toString().matches(".*value=12.*"));
+		assertTrue(this.datapoint.toString().matches(".*Datapoint.*"));
+		assertTrue(this.datapoint.toString().matches(".*at=2013-03-03T12:22:29.192192Z.*"));
+		assertTrue(this.datapoint.toString().matches(".*value=12.*"));
 	}
 }

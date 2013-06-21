@@ -13,6 +13,8 @@ import org.junit.Before;
 import org.junit.Test;
 
 /**
+ * Unit tests for {@link Feed} instances.
+ *
  * @author sam
  *
  */
@@ -33,16 +35,16 @@ public class FeedTest {
 		tags.add("temperature");
 		tags.add("heat");
 		this.feed.setTags(tags);
-		List<Datastream> datastreams = new ArrayList<Datastream>();
-		Datastream datastream = new Datastream();
-		datastream.setId("sensor1");
-		datastream.setCurrentValue("12.2");
-		datastreams.add(datastream);
-		Datastream datastream2 = new Datastream();
-		datastream2.setId("sensor2");
-		datastream2.setCurrentValue("92.2");
-		datastreams.add(datastream2);
-		this.feed.setDatastreams(datastreams);
+		List<Channel> channels = new ArrayList<Channel>();
+		Channel channel = new Channel();
+		channel.setId("sensor1");
+		channel.setCurrentValue("12.2");
+		channels.add(channel);
+		Channel channel2 = new Channel();
+		channel2.setId("sensor2");
+		channel2.setCurrentValue("92.2");
+		channels.add(channel2);
+		this.feed.setChannels(channels);
 		Location location = new Location();
 		location.setName("Location");
 		location.setLatitude(0.0012);
@@ -51,23 +53,23 @@ public class FeedTest {
 	}
 
 	@Test
-	public void testGettersSetters() {
+	public void gettersSetters() {
 		assertEquals(this.feed.getId(), "123");
 		assertEquals(this.feed.getTitle(), "Title");
 		assertEquals(this.feed.getDescription(), "Description");
 	}
 
 	@Test
-	public void testAddDatastream() {
-		assertTrue(this.feed.getDatastreams().size() == 2);
-		Datastream newDatastream = new Datastream();
+	public void addChannel() {
+		assertTrue(this.feed.getChannels().size() == 2);
+		Channel newDatastream = new Channel();
 		newDatastream.setId("sensor3");
-		this.feed.addDatastream(newDatastream);
-		assertTrue(this.feed.getDatastreams().size() == 3);
+		this.feed.addChannel(newDatastream);
+		assertTrue(this.feed.getChannels().size() == 3);
 	}
 
 	@Test
-	public void testEquals() {
+	public void equalsOnId() {
 		Feed feed2 = new Feed();
 		feed2.setId("123");
 		assertEquals(this.feed, feed2);
@@ -76,7 +78,7 @@ public class FeedTest {
 	}
 
 	@Test
-	public void testHashCode() {
+	public void hashCodeOnId() {
 		Feed feed2 = new Feed();
 		feed2.setId("123");
 		assertTrue(this.feed.hashCode() == feed2.hashCode());
@@ -85,7 +87,7 @@ public class FeedTest {
 	}
 
 	@Test
-	public void testDeepEquals() {
+	public void deepEquals() {
 		Feed feed2 = new Feed();
 		feed2.setId("123");
 		assertFalse(this.feed.deepEquals(feed2));

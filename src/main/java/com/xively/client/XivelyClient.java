@@ -20,6 +20,7 @@ import com.xively.client.exceptions.RequestException;
 import com.xively.client.http.XivelyRequest;
 import com.xively.client.http.XivelyResponse;
 import com.xively.client.models.ResponseError;
+import com.xively.client.service.ChannelService;
 import com.xively.client.service.FeedService;
 import com.xively.client.utils.EncodingUtils;
 import com.xively.client.utils.JsonUtils;
@@ -82,6 +83,8 @@ public class XivelyClient {
 	private final int readTimeout;
 
 	private FeedService feedService;
+
+	private ChannelService channelService;
 
 	private final int bufferSize = 8192;
 
@@ -211,6 +214,14 @@ public class XivelyClient {
 		}
 
 		return this.feedService;
+	}
+
+	public ChannelService channels() {
+		if (this.channelService == null) {
+			this.channelService = new ChannelService(this);
+		}
+
+		return this.channelService;
 	}
 
 	/**

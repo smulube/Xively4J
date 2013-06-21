@@ -3,6 +3,7 @@
 package com.xively.client.service;
 
 import com.xively.client.XivelyClient;
+import com.xively.client.models.DomainObject;
 
 /**
  * @author sam
@@ -37,5 +38,30 @@ public abstract class BaseService {
 	 */
 	public XivelyClient getClient() {
 		return this.client;
+	}
+
+	/**
+	 * Throw {@link IllegalArgumentException} if id is null or empty.
+	 * @param id
+	 */
+	protected void checkDomainObjectId(String id, String label) {
+		if (id == null) {
+			throw new IllegalArgumentException(label + " ID cannot be null");
+		}
+
+		if (id.length() == 0) {
+			throw new IllegalArgumentException(label + " ID cannot be empty");
+		}
+	}
+
+	/**
+	 *
+	 * @param object
+	 * @param label
+	 */
+	protected void checkDomainObject(DomainObject object, String label) {
+		if (object == null) {
+			throw new IllegalArgumentException(label + " cannot be null");
+		}
 	}
 }

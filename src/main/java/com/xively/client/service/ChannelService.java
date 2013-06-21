@@ -4,107 +4,99 @@ package com.xively.client.service;
 
 import java.io.IOException;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import com.xively.client.XivelyClient;
 import com.xively.client.XivelyConstants;
 import com.xively.client.http.XivelyRequest;
 import com.xively.client.http.XivelyResponse;
+import com.xively.client.models.Channel;
 import com.xively.client.models.Feed;
 
 /**
  * @author sam
  *
  */
-public class FeedService extends BaseService {
+public class ChannelService extends BaseService {
 
-	private final Logger logger = LoggerFactory.getLogger(FeedService.class);
-
-	public FeedService() {
+	/**
+	 *
+	 */
+	public ChannelService() {
 		super();
 	}
 
-	public FeedService(XivelyClient client) {
+	/**
+	 * @param client
+	 */
+	public ChannelService(XivelyClient client) {
 		super(client);
 	}
 
 	/**
 	 *
+	 * @param feed
 	 * @param id
 	 * @return
 	 * @throws IOException
 	 */
-	public Feed getFeed(String id) throws IOException {
-		checkDomainObjectId(id, "Feed");
+	public Channel getChannel(Feed feed, String id) throws IOException {
+		checkDomainObject(feed, "Feed");
+		checkDomainObjectId(feed.getId(), "Feed");
 
 		StringBuilder uri = new StringBuilder(client.getBaseUri());
 		uri.append("/").append(XivelyConstants.SEGMENT_FEEDS);
+		uri.append("/").append(feed.getId());
+		uri.append("/").append(XivelyConstants.SEGMENT_DATASTREAMS);
 		uri.append("/").append(id);
 
 		XivelyRequest request = new XivelyRequest();
-		request.setUri(uri.toString()).setType(Feed.class);
+		request.setUri(uri.toString()).setType(Channel.class);
 
 		XivelyResponse response = client.get(request);
 
-		return (Feed) response.getDomainObject();
+		return (Channel) response.getDomainObject();
 	}
 
 	/**
 	 *
 	 * @param feed
+	 * @param channel
 	 * @return
 	 * @throws IOException
 	 */
-	public Feed updateFeed(Feed feed) throws IOException {
+	public Channel updateChannel(Feed feed, Channel channel) throws IOException {
 		checkDomainObject(feed, "Feed");
+		checkDomainObjectId(feed.getId(), "Feed");
 
-		String id = feed.getId();
+		String id = channel.getId();
 
-		checkDomainObjectId(id, "Feed");
+		checkDomainObjectId(id, "Channel");
 
 		StringBuilder uri = new StringBuilder(client.getBaseUri());
 		uri.append("/").append(XivelyConstants.SEGMENT_FEEDS);
+		uri.append("/").append(feed.getId());
+		uri.append("/").append(XivelyConstants.SEGMENT_DATASTREAMS);
 		uri.append("/").append(id);
 
 		XivelyRequest request = new XivelyRequest();
 		request.setUri(uri);
-		request.setObject(feed);
+		request.setObject(channel);
 
-		return (Feed) client.put(request).getDomainObject();
+		return (Channel) client.put(request).getDomainObject();
 	}
 
-	/**
-	 *
-	 * @param id
-	 * @throws IOException
-	 */
-	public void deleteFeed(String id) throws IOException {
-		checkDomainObjectId(id, "Feed");
+	public void deleteChannel(Feed feed, String id) throws IOException {
+		checkDomainObject(feed, "Feed");
+		checkDomainObjectId(feed.getId(), "Feed");
 
 		StringBuilder uri = new StringBuilder(client.getBaseUri());
 		uri.append("/").append(XivelyConstants.SEGMENT_FEEDS);
+		uri.append("/").append(feed.getId());
+		uri.append("/").append(XivelyConstants.SEGMENT_DATASTREAMS);
 		uri.append("/").append(id);
 
 		XivelyRequest request = new XivelyRequest();
 		request.setUri(uri);
 
 		client.delete(request);
-	}
-
-	public Feed createFeed(Feed feed) throws IOException {
-		if (feed == null) {
-			throw new IllegalArgumentException("Feed cannot be null");
-		}
-
-		StringBuilder uri = new StringBuilder(client.getBaseUri());
-		uri.append("/").append(XivelyConstants.SEGMENT_FEEDS);
-
-		XivelyRequest request = new XivelyRequest();
-		request.setUri(uri).setObject(feed);
-
-		XivelyResponse response = client.post(request);
-
-		return (Feed) client.post(request).getDomainObject();
 	}
 }

@@ -12,7 +12,7 @@ import org.junit.Before;
 import org.junit.Test;
 
 import com.xively.client.models.Datapoint;
-import com.xively.client.models.Datastream;
+import com.xively.client.models.Channel;
 import com.xively.client.models.Feed;
 import com.xively.client.models.Location;
 import com.xively.client.models.Unit;
@@ -24,7 +24,7 @@ import com.xively.client.models.Unit;
 public class JsonUtilsTest {
 
 	private Datapoint datapoint;
-	private Datastream datastream;
+	private Channel channel;
 	private Feed feed;
 
 	/**
@@ -32,37 +32,37 @@ public class JsonUtilsTest {
 	 */
 	@Before
 	public void setUp() throws Exception {
-		this.datastream = new Datastream();
-		this.datastream.setId("sensor1");
-		this.datastream.setCurrentValue("12.2");
-		this.datastream.setAt("2013-03-03T12:25.83.192094Z");
+		this.channel = new Channel();
+		this.channel.setId("sensor1");
+		this.channel.setCurrentValue("12.2");
+		this.channel.setAt("2013-03-03T12:25.83.192094Z");
 
 		List<String> tags = new ArrayList<String>();
 		tags.add("temperature");
 		tags.add("temp");
-		this.datastream.setTags(tags);
+		this.channel.setTags(tags);
 
 		Unit unit = new Unit();
 		unit.setLabel("Celsius");
 		unit.setSymbol("C");
 		unit.setType(Unit.IFCClassification.BASIC_SI);
-		this.datastream.setUnit(unit);
+		this.channel.setUnit(unit);
 
 		List<Datapoint> datapoints = new ArrayList<Datapoint>();
 		this.datapoint = new Datapoint("10", "2013-03-03T11:04:29.377483Z");
 		datapoints.add(this.datapoint);
 		datapoints.add(new Datapoint("12", "2013-03-03T12:22:29.192192Z"));
 
-		this.datastream.setDatapoints(datapoints);
+		this.channel.setDatapoints(datapoints);
 
-		List<Datastream> datastreams = new ArrayList<Datastream>();
-		datastreams.add(datastream);
+		List<Channel> channels = new ArrayList<Channel>();
+		channels.add(channel);
 
 		this.feed = new Feed();
 		this.feed.setId("123");
 		this.feed.setTitle("Office environment");
 		this.feed.setDescription("This is a description");
-		this.feed.setDatastreams(datastreams);
+		this.feed.setChannels(channels);
 
 		Location location = new Location();
 		location.setName("London");
@@ -91,11 +91,11 @@ public class JsonUtilsTest {
 
 	@Test
 	public void testDatastreamSerialization() {
-		String json = JsonUtils.toJson(this.datastream);
-		Datastream parsed = JsonUtils.fromJson(json, Datastream.class);
+		String json = JsonUtils.toJson(this.channel);
+		Channel parsed = JsonUtils.fromJson(json, Channel.class);
 
-		assertEquals(parsed, this.datastream);
-		assertTrue(parsed.deepEquals(this.datastream));
+		assertEquals(parsed, this.channel);
+		assertTrue(parsed.deepEquals(this.channel));
 
 		assertEquals("sensor1", parsed.getId());
 		assertEquals("12.2", parsed.getCurrentValue());

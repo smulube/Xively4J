@@ -27,13 +27,13 @@ public class Feed extends DomainObjectImpl {
 	private Location location;
 	@SerializedName("private")
 	private boolean isPrivate;
-	private List<Datastream> datastreams;
+	private List<Channel> channels;
 
 	/**
-	 * @param datastream
+	 * @param channel
 	 */
-	public void addDatastream(Datastream datastream) {
-		this.datastreams.add(datastream);
+	public void addChannel(Channel channel) {
+		this.channels.add(channel);
 	}
 
 	/*
@@ -68,10 +68,10 @@ public class Feed extends DomainObjectImpl {
 	}
 
 	/**
-	 * @return the datastreams
+	 * @return the channels
 	 */
-	public List<Datastream> getDatastreams() {
-		return datastreams;
+	public List<Channel> getChannels() {
+		return channels;
 	}
 
 	/**
@@ -132,11 +132,11 @@ public class Feed extends DomainObjectImpl {
 	}
 
 	/**
-	 * @param datastreams
-	 *            the datastreams to set
+	 * @param channels
+	 *            the channels to set
 	 */
-	public void setDatastreams(List<Datastream> datastreams) {
-		this.datastreams = datastreams;
+	public void setChannels(List<Channel> channels) {
+		this.channels = channels;
 	}
 
 	/**

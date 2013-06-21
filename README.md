@@ -9,7 +9,7 @@ client.setApiKey("YOURAPIKEY");
 Get feed object from the API
 
 ```java
-Feed feed = client.feeds().getFeed(504);
+Feed feed = client.feeds().getFeed("504");
 ```
 
 Update feed
@@ -30,8 +30,7 @@ feed.setDatastreams(datastreams);
 client.feeds().updateFeed(feed);
 ```
 
-Write multiple datapoints into history of a datastream
-
 ```java
-
+client.channels(feed).createChannel(channel);
+client.channels(feed).deleteChannel("sensor1");
 ```
