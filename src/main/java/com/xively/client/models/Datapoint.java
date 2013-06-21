@@ -82,7 +82,7 @@ public class Datapoint extends DomainObjectImpl {
 	 * @see com.xively.client.models.DomainObject#getId()
 	 */
 	@Override
-	public Object getId() {
+	public String getId() {
 		return this.at;
 	}
 
@@ -90,7 +90,7 @@ public class Datapoint extends DomainObjectImpl {
 	 * @see com.xively.client.models.DomainObject#setId(java.lang.Object)
 	 */
 	@Override
-	public void setId(Object id) {
+	public void setId(String id) {
 		this.at = (String) id;
 	}
 

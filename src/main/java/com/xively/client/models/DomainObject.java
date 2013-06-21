@@ -15,14 +15,14 @@ public interface DomainObject extends Serializable {
 	 *
 	 * @return
 	 */
-	public Object getId();
+	public String getId();
 
 	/**
 	 * The id attribute to set.
 	 *
 	 * @param id
 	 */
-	public void setId(Object id);
+	public void setId(String id);
 
 	/**
 	 * Deep equality test across all attributes.

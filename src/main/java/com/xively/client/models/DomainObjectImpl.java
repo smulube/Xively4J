@@ -11,10 +11,25 @@ import org.apache.commons.lang3.builder.HashCodeBuilder;
  */
 public abstract class DomainObjectImpl implements DomainObject {
 
-	/**
-	 *
-	 */
+	protected String id;
+
 	private static final long serialVersionUID = 1579033107880707099L;
+
+	/* (non-Javadoc)
+	 * @see com.xively.client.models.DomainObject#setId(java.lang.String)
+	 */
+	@Override
+	public void setId(String id) {
+		this.id = id;
+	}
+
+	/* (non-Javadoc)
+	 * @see com.xively.client.models.DomainObject#getId()
+	 */
+	@Override
+	public String getId() {
+		return this.id;
+	}
 
 	@Override
 	public int hashCode() {

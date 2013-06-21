@@ -18,7 +18,6 @@ public class Feed extends DomainObjectImpl {
 
 	private static final long serialVersionUID = -6276027532856247302L;
 
-	private Integer id;
 	private String title;
 	private String description;
 	private String updatedAt;
@@ -80,16 +79,6 @@ public class Feed extends DomainObjectImpl {
 	 */
 	public String getDescription() {
 		return description;
-	}
-
-	/*
-	 * (non-Javadoc)
-	 *
-	 * @see com.xively.client.models.DomainObject#getId()
-	 */
-	@Override
-	public Object getId() {
-		return id;
 	}
 
 	/**
@@ -156,24 +145,6 @@ public class Feed extends DomainObjectImpl {
 	 */
 	public void setDescription(String description) {
 		this.description = description;
-	}
-
-	/**
-	 * @param id
-	 *            the id to set
-	 */
-	public void setId(Integer id) {
-		this.id = id;
-	}
-
-	/*
-	 * (non-Javadoc)
-	 *
-	 * @see com.xively.client.models.DomainObject#setId(java.lang.Object)
-	 */
-	@Override
-	public void setId(Object id) {
-		this.id = (Integer) id;
 	}
 
 	/**

@@ -15,7 +15,6 @@ public class Datastream extends DomainObjectImpl {
 
 	private static final long serialVersionUID = -4713767723173762280L;
 
-	private String id;
 	private String at;
 	private String current_value;
 	private double min_value;
@@ -78,11 +77,6 @@ public class Datastream extends DomainObjectImpl {
 		return datapoints;
 	}
 
-	@Override
-	public Object getId() {
-		return id;
-	}
-
 	/**
 	 * @return the max_value
 	 */
@@ -133,24 +127,6 @@ public class Datastream extends DomainObjectImpl {
 	 */
 	public void setDatapoints(List<Datapoint> datapoints) {
 		this.datapoints = datapoints;
-	}
-
-	/*
-	 * (non-Javadoc)
-	 *
-	 * @see com.xively.client.models.DomainObject#setId(java.lang.Object)
-	 */
-	@Override
-	public void setId(Object id) {
-		this.id = (String) id;
-	}
-
-	/**
-	 * @param id
-	 *            the id to set
-	 */
-	public void setId(String id) {
-		this.id = id;
 	}
 
 	/**

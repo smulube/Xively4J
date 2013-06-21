@@ -26,7 +26,7 @@ public class FeedTest {
 	@Before
 	public void setUp() throws Exception {
 		this.feed = new Feed();
-		this.feed.setId(123);
+		this.feed.setId("123");
 		this.feed.setTitle("Title");
 		this.feed.setDescription("Description");
 		List<String> tags = new ArrayList<String>();
@@ -52,7 +52,7 @@ public class FeedTest {
 
 	@Test
 	public void testGettersSetters() {
-		assertEquals(this.feed.getId(), 123);
+		assertEquals(this.feed.getId(), "123");
 		assertEquals(this.feed.getTitle(), "Title");
 		assertEquals(this.feed.getDescription(), "Description");
 	}
@@ -69,7 +69,7 @@ public class FeedTest {
 	@Test
 	public void testEquals() {
 		Feed feed2 = new Feed();
-		feed2.setId(123);
+		feed2.setId("123");
 		assertEquals(this.feed, feed2);
 		feed2.setId(null);
 		assertFalse(this.feed.equals(feed2));
@@ -78,7 +78,7 @@ public class FeedTest {
 	@Test
 	public void testHashCode() {
 		Feed feed2 = new Feed();
-		feed2.setId(123);
+		feed2.setId("123");
 		assertTrue(this.feed.hashCode() == feed2.hashCode());
 		feed2.setId(null);
 		assertFalse(this.feed.hashCode() == feed2.hashCode());
@@ -87,7 +87,7 @@ public class FeedTest {
 	@Test
 	public void testDeepEquals() {
 		Feed feed2 = new Feed();
-		feed2.setId(123);
+		feed2.setId("123");
 		assertFalse(this.feed.deepEquals(feed2));
 		assertTrue(this.feed.deepEquals(this.feed));
 	}
