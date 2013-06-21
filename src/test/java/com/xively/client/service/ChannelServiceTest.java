@@ -148,4 +148,123 @@ public class ChannelServiceTest {
 	public void deleteChannelWithNullFeed() throws IOException {
 		this.service.deleteChannel(null, "sensor1");
 	}
+
+	@Test(expected = IllegalArgumentException.class)
+	public void deleteChannelWithFeedWithNullId() throws IOException {
+		Feed feed = new Feed();
+		this.service.deleteChannel(feed, "sensor1");
+	}
+
+	@Test(expected = IllegalArgumentException.class)
+	public void deleteChannelWithFeedWithEmptyId() throws IOException {
+		Feed feed = new Feed();
+		feed.setId("");
+		this.service.deleteChannel(feed, "sensor1");
+	}
+
+	@Test(expected = IllegalArgumentException.class)
+	public void deleteChannelWithNullChannelId() throws IOException {
+		Feed feed = new Feed();
+		feed.setId("123");
+		this.service.deleteChannel(feed, null);
+	}
+
+	@Test(expected = IllegalArgumentException.class)
+	public void deleteChannelWithEmptyChannelId() throws IOException {
+		Feed feed = new Feed();
+		feed.setId("123");
+		this.service.deleteChannel(feed, "");
+	}
+
+	@Test
+	public void deleteChannel() throws IOException {
+		Feed feed = new Feed();
+		feed.setId("123");
+		this.service.deleteChannel(feed, "sensor1");
+		XivelyRequest request = new XivelyRequest();
+		request.setUri("https://api.xively.com/v2/feeds/123/datastreams/sensor1");
+		request.setType(Channel.class);
+		verify(this.client).delete(request);
+	}
+
+	@Test(expected = IllegalArgumentException.class)
+	public void createChannelWithNullFeed() throws IOException {
+		Channel channel = new Channel();
+		channel.setId("sensor1");
+		this.service.createChannel(null, channel);
+	}
+
+	@Test(expected = IllegalArgumentException.class)
+	public void createChannelWithFeedWithNullId() throws IOException {
+		Feed feed = new Feed();
+		Channel channel = new Channel();
+		channel.setId("sensor1");
+		this.service.createChannel(feed, channel);
+	}
+
+	@Test(expected = IllegalArgumentException.class)
+	public void createChannelWithFeedWithEmptyId() throws IOException {
+		Feed feed = new Feed();
+		feed.setId("");
+		Channel channel = new Channel();
+		channel.setId("sensor1");
+		this.service.createChannel(feed, channel);
+	}
+
+	@Test(expected = IllegalArgumentException.class)
+	public void createChannelWithNullChannel() throws IOException {
+		Feed feed = new Feed();
+		feed.setId("123");
+		this.service.createChannel(feed, null);
+	}
+
+	@Test
+	public void createChannelWithChannelWithNullId() throws IOException {
+		doReturn("0").when(this.response).getIdFromLocation();
+		doReturn(this.response).when(this.client).post(any(XivelyRequest.class));
+
+		Feed feed = new Feed();
+		feed.setId("123");
+		Channel channel = new Channel();
+		this.service.createChannel(feed, channel);
+		XivelyRequest request = new XivelyRequest();
+		request.setUri("https://api.xively.com/v2/feeds/123/datastreams");
+		request.setObject(channel);
+		verify(this.client).post(request);
+		verify(this.response).getIdFromLocation();
+	}
+
+	@Test
+	public void createChannelWithChannelWithEmptyId() throws IOException {
+		doReturn("0").when(this.response).getIdFromLocation();
+		doReturn(this.response).when(this.client).post(any(XivelyRequest.class));
+
+		Feed feed = new Feed();
+		feed.setId("123");
+		Channel channel = new Channel();
+		channel.setId("");
+		this.service.createChannel(feed, channel);
+		XivelyRequest request = new XivelyRequest();
+		request.setUri("https://api.xively.com/v2/feeds/123/datastreams");
+		request.setObject(channel);
+		verify(this.client).post(request);
+		verify(this.response).getIdFromLocation();
+	}
+
+	@Test
+	public void createChannelWithId() throws IOException {
+		doReturn("0").when(this.response).getIdFromLocation();
+		doReturn(this.response).when(this.client).post(any(XivelyRequest.class));
+
+		Feed feed = new Feed();
+		feed.setId("123");
+		Channel channel = new Channel();
+		channel.setId("sensor1");
+		this.service.createChannel(feed, channel);
+		XivelyRequest request = new XivelyRequest();
+		request.setUri("https://api.xively.com/v2/feeds/123/datastreams");
+		request.setObject(channel);
+		verify(this.client).post(request);
+		verify(this.response).getIdFromLocation();
+	}
 }

@@ -4,6 +4,9 @@ package com.xively.client.service;
 
 import java.io.IOException;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.xively.client.XivelyClient;
 import com.xively.client.XivelyConstants;
 import com.xively.client.http.XivelyRequest;
@@ -16,6 +19,8 @@ import com.xively.client.models.Feed;
  *
  */
 public class ChannelService extends BaseService {
+
+	private final Logger logger = LoggerFactory.getLogger(ChannelService.class);
 
 	/**
 	 *
@@ -78,15 +83,22 @@ public class ChannelService extends BaseService {
 		uri.append("/").append(id);
 
 		XivelyRequest request = new XivelyRequest();
-		request.setUri(uri);
-		request.setObject(channel);
+		request.setUri(uri).setObject(channel);
 
 		return (Channel) client.put(request).getDomainObject();
 	}
 
+	/**
+	 *
+	 * @param feed
+	 * @param id
+	 * @throws IOException
+	 */
 	public void deleteChannel(Feed feed, String id) throws IOException {
 		checkDomainObject(feed, "Feed");
 		checkDomainObjectId(feed.getId(), "Feed");
+
+		checkDomainObjectId(id, "Channel");
 
 		StringBuilder uri = new StringBuilder(client.getBaseUri());
 		uri.append("/").append(XivelyConstants.SEGMENT_FEEDS);
@@ -98,5 +110,32 @@ public class ChannelService extends BaseService {
 		request.setUri(uri);
 
 		client.delete(request);
+	}
+
+	/**
+	 *
+	 * @param feed
+	 * @param channel
+	 * @return
+	 * @throws IOException
+	 */
+	public Channel createChannel(Feed feed, Channel channel) throws IOException {
+		checkDomainObject(feed, "Feed");
+		checkDomainObjectId(feed.getId(), "Feed");
+
+		checkDomainObject(channel, "Channel");
+
+		StringBuilder uri = new StringBuilder(client.getBaseUri());
+		uri.append("/").append(XivelyConstants.SEGMENT_FEEDS);
+		uri.append("/").append(feed.getId());
+		uri.append("/").append(XivelyConstants.SEGMENT_DATASTREAMS);
+
+		XivelyRequest request = new XivelyRequest();
+		request.setUri(uri).setObject(channel);
+
+		XivelyResponse response = client.post(request);
+		channel.setId(response.getIdFromLocation());
+
+		return channel;
 	}
 }
