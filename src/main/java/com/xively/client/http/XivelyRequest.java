@@ -4,6 +4,8 @@ package com.xively.client.http;
 
 import java.lang.reflect.Type;
 
+import org.apache.commons.lang3.builder.EqualsBuilder;
+import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 
 /**
@@ -92,5 +94,37 @@ public class XivelyRequest {
 	public String toString() {
 		return new ToStringBuilder(this).append("uri", uri)
 				.append("type", type).append("object", object).toString();
+	}
+
+	/*
+	 * (non-Javadoc)
+	 *
+	 * @see java.lang.Object#equals(java.lang.Object)
+	 */
+	@Override
+	public boolean equals(Object obj) {
+		if (obj == null) {
+			return false;
+		}
+		if (this == obj) {
+			return true;
+		}
+		if (obj.getClass() != getClass()) {
+			return false;
+		}
+
+		XivelyRequest other = (XivelyRequest) obj;
+
+		return new EqualsBuilder().append(this.uri, other.uri).isEquals();
+	}
+
+	/*
+	 * (non-Javadoc)
+	 *
+	 * @see java.lang.Object#hashCode()
+	 */
+	@Override
+	public int hashCode() {
+		return new HashCodeBuilder(57, 67).append(this.uri).toHashCode();
 	}
 }

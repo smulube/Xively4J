@@ -27,26 +27,26 @@ public class XivelyRequestTest {
 	}
 
 	@Test
-	public void testCanSetGetUri() {
+	public void canSetGetUri() {
 		this.request.setUri("http://example.com");
 		assertEquals("http://example.com", this.request.getUri());
 	}
 
 	@Test
-	public void testCanSetGetType() {
+	public void canSetGetType() {
 		this.request.setType(Feed.class);
 		assertEquals(Feed.class, this.request.getType());
 	}
 
 	@Test
-	public void testCanSetGetObject() {
+	public void canSetGetObject() {
 		Feed feed = new Feed();
 		this.request.setObject(feed);
 		assertEquals(feed, this.request.getObject());
 	}
 
 	@Test
-	public void testReturnsUsefulToString() {
+	public void returnsUsefulToString() {
 		this.request.setUri("http://example.com");
 		this.request.setType(Feed.class);
 		assertTrue(this.request.toString().matches(".*uri=http://example.com.*"));
@@ -54,8 +54,24 @@ public class XivelyRequestTest {
 	}
 
 	@Test
-	public void testGenerateUri() {
+	public void generateUri() {
 		this.request.setUri("http://example.com");
 		assertEquals("http://example.com", this.request.generateUri());
+	}
+
+	@Test
+	public void equalsMatchesOnUri() {
+		this.request.setUri("https://example.com").setType(Feed.class);
+		XivelyRequest request2 = new XivelyRequest();
+		request2.setUri("https://example.com").setType(Feed.class);
+		assertTrue(this.request.equals(request2));
+	}
+
+	@Test
+	public void hashcodeOnUri() {
+		this.request.setUri("https://example.com").setType(Feed.class);
+		XivelyRequest request2 = new XivelyRequest();
+		request2.setUri("https://example.com").setType(Feed.class);
+		assertTrue(this.request.hashCode() == request2.hashCode());
 	}
 }
