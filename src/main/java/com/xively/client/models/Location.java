@@ -14,26 +14,12 @@ import org.apache.commons.lang3.builder.ToStringBuilder;
  */
 public class Location implements Serializable {
 
-	public enum Exposure {
-		INDOOR("indoor"), OUTDOOR("outdoor");
-
-		private final String value;
-
-		private Exposure(String value) {
-			this.value = value;
-		}
-
-		public String getValue() {
-			return value;
-		}
-
-		public static Exposure fromString(String value) {
-			return Exposure.valueOf(value.toUpperCase());
-		}
-	}
-
 	public enum Disposition {
 		FIXED("fixed"), MOBILE("mobile");
+
+		public static Disposition fromString(String value) {
+			return Disposition.valueOf(value.toUpperCase());
+		}
 
 		private final String value;
 
@@ -44,14 +30,20 @@ public class Location implements Serializable {
 		public String getValue() {
 			return value;
 		}
-
-		public static Disposition fromString(String value) {
-			return Disposition.valueOf(value.toUpperCase());
-		}
 	}
 
 	public enum Domain {
 		PHYSICAL("physical"), VIRTUAL("virtual");
+
+		/**
+		 * Case insensitive version of valueOf.
+		 *
+		 * @param value
+		 * @return
+		 */
+		public static Domain fromString(String value) {
+			return Domain.valueOf(value.toUpperCase());
+		}
 
 		private final String value;
 
@@ -62,15 +54,23 @@ public class Location implements Serializable {
 		public String getValue() {
 			return value;
 		}
+	}
 
-		/**
-		 * Case insensitive version of valueOf.
-		 *
-		 * @param value
-		 * @return
-		 */
-		public static Domain fromString(String value) {
-			return Domain.valueOf(value.toUpperCase());
+	public enum Exposure {
+		INDOOR("indoor"), OUTDOOR("outdoor");
+
+		public static Exposure fromString(String value) {
+			return Exposure.valueOf(value.toUpperCase());
+		}
+
+		private final String value;
+
+		private Exposure(String value) {
+			this.value = value;
+		}
+
+		public String getValue() {
+			return value;
 		}
 	}
 
@@ -86,118 +86,6 @@ public class Location implements Serializable {
 	private Exposure exposure;
 	private Disposition disposition;
 	private Domain domain;
-
-	/**
-	 * @return the name
-	 */
-	public String getName() {
-		return name;
-	}
-
-	/**
-	 * @param name
-	 *            the name to set
-	 */
-	public void setName(String name) {
-		this.name = name;
-	}
-
-	/**
-	 * @return the latitude
-	 */
-	public double getLatitude() {
-		return latitude;
-	}
-
-	/**
-	 * @param latitude
-	 *            the latitude to set
-	 */
-	public void setLatitude(double latitude) {
-		this.latitude = latitude;
-	}
-
-	/**
-	 * @return the longitude
-	 */
-	public double getLongitude() {
-		return longitude;
-	}
-
-	/**
-	 * @param longitude
-	 *            the longitude to set
-	 */
-	public void setLongitude(double longitude) {
-		this.longitude = longitude;
-	}
-
-	/**
-	 * @return the elevation
-	 */
-	public String getElevation() {
-		return elevation;
-	}
-
-	/**
-	 * @param elevation
-	 *            the elevation to set
-	 */
-	public void setElevation(String elevation) {
-		this.elevation = elevation;
-	}
-
-	/**
-	 * @return the exposure
-	 */
-	public Exposure getExposure() {
-		return exposure;
-	}
-
-	/**
-	 * @param exposure
-	 *            the exposure to set
-	 */
-	public void setExposure(Exposure exposure) {
-		this.exposure = exposure;
-	}
-
-	/**
-	 * @return the disposition
-	 */
-	public Disposition getDisposition() {
-		return disposition;
-	}
-
-	/**
-	 * @param disposition
-	 *            the disposition to set
-	 */
-	public void setDisposition(Disposition disposition) {
-		this.disposition = disposition;
-	}
-
-	/**
-	 * @return the domain
-	 */
-	public Domain getDomain() {
-		return domain;
-	}
-
-	/**
-	 * @param domain
-	 *            the domain to set
-	 */
-	public void setDomain(Domain domain) {
-		this.domain = domain;
-	}
-
-	@Override
-	public int hashCode() {
-		return new HashCodeBuilder(23, 91).append(name).append(latitude)
-				.append(longitude).append(elevation).append(exposure)
-				.append(disposition).append(domain).toHashCode();
-	}
 
 	@Override
 	public boolean equals(Object obj) {
@@ -220,6 +108,123 @@ public class Location implements Serializable {
 				.append(exposure, other.exposure)
 				.append(disposition, other.disposition)
 				.append(domain, other.domain).isEquals();
+	}
+
+	/**
+	 * @return the disposition
+	 */
+	public Disposition getDisposition() {
+		return disposition;
+	}
+
+	/**
+	 * @return the domain
+	 */
+	public Domain getDomain() {
+		return domain;
+	}
+
+	/**
+	 * @return the elevation
+	 */
+	public String getElevation() {
+		return elevation;
+	}
+
+	/**
+	 * @return the exposure
+	 */
+	public Exposure getExposure() {
+		return exposure;
+	}
+
+	/**
+	 * @return the latitude
+	 */
+	public double getLatitude() {
+		return latitude;
+	}
+
+	/**
+	 * @return the longitude
+	 */
+	public double getLongitude() {
+		return longitude;
+	}
+
+	/**
+	 * @return the name
+	 */
+	public String getName() {
+		return name;
+	}
+
+	@Override
+	public int hashCode() {
+		return new HashCodeBuilder(23, 91)
+			.append(name)
+			.append(latitude)
+			.append(longitude)
+			.append(elevation)
+			.append(exposure)
+			.append(disposition)
+			.append(domain).toHashCode();
+	}
+
+	/**
+	 * @param disposition
+	 *            the disposition to set
+	 */
+	public void setDisposition(Disposition disposition) {
+		this.disposition = disposition;
+	}
+
+	/**
+	 * @param domain
+	 *            the domain to set
+	 */
+	public void setDomain(Domain domain) {
+		this.domain = domain;
+	}
+
+	/**
+	 * @param elevation
+	 *            the elevation to set
+	 */
+	public void setElevation(String elevation) {
+		this.elevation = elevation;
+	}
+
+	/**
+	 * @param exposure
+	 *            the exposure to set
+	 */
+	public void setExposure(Exposure exposure) {
+		this.exposure = exposure;
+	}
+
+	/**
+	 * @param latitude
+	 *            the latitude to set
+	 */
+	public void setLatitude(double latitude) {
+		this.latitude = latitude;
+	}
+
+	/**
+	 * @param longitude
+	 *            the longitude to set
+	 */
+	public void setLongitude(double longitude) {
+		this.longitude = longitude;
+	}
+
+	/**
+	 * @param name
+	 *            the name to set
+	 */
+	public void setName(String name) {
+		this.name = name;
 	}
 
 	@Override

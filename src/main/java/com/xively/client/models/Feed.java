@@ -27,6 +27,7 @@ public class Feed extends DomainObjectImpl {
 	private Location location;
 	@SerializedName("private")
 	private boolean isPrivate;
+	@SerializedName("datastreams")
 	private List<Channel> channels;
 
 	/**

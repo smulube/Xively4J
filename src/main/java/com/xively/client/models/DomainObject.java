@@ -18,11 +18,13 @@ public interface DomainObject extends Serializable {
 	public String getId();
 
 	/**
+	 *
 	 * The id attribute to set.
 	 *
 	 * @param id
+	 * @return
 	 */
-	public void setId(String id);
+	public DomainObject setId(String id);
 
 	/**
 	 * Deep equality test across all attributes.

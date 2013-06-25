@@ -17,8 +17,8 @@ public class Channel extends DomainObjectImpl {
 
 	private String at;
 	private String current_value;
-	private double min_value;
-	private double max_value;
+	private Double min_value;
+	private Double max_value;
 	private List<String> tags;
 	private Unit unit;
 	private List<Datapoint> datapoints;
@@ -80,14 +80,14 @@ public class Channel extends DomainObjectImpl {
 	/**
 	 * @return the max_value
 	 */
-	public double getMaxValue() {
+	public Double getMaxValue() {
 		return max_value;
 	}
 
 	/**
 	 * @return the min_value
 	 */
-	public double getMinValue() {
+	public Double getMinValue() {
 		return min_value;
 	}
 
@@ -133,7 +133,7 @@ public class Channel extends DomainObjectImpl {
 	 * @param max_value
 	 *            the max_value to set
 	 */
-	public void setMaxValue(double max_value) {
+	public void setMaxValue(Double max_value) {
 		this.max_value = max_value;
 	}
 
@@ -143,7 +143,7 @@ public class Channel extends DomainObjectImpl {
 	 */
 	public void setMaxValue(String max_value) {
 		if (max_value != null) {
-			setMaxValue(Double.valueOf(max_value).doubleValue());
+			setMaxValue(Double.valueOf(max_value));
 		}
 	}
 
@@ -152,7 +152,7 @@ public class Channel extends DomainObjectImpl {
 	 * @param min_value
 	 *            the min_value to set
 	 */
-	public void setMinValue(double min_value) {
+	public void setMinValue(Double min_value) {
 		this.min_value = min_value;
 	}
 
@@ -162,7 +162,7 @@ public class Channel extends DomainObjectImpl {
 	 */
 	public void setMinValue(String min_value) {
 		if (min_value != null) {
-			this.setMinValue(Double.valueOf(min_value).doubleValue());
+			this.setMinValue(Double.valueOf(min_value));
 		}
 	}
 

@@ -15,15 +15,21 @@ public abstract class DomainObjectImpl implements DomainObject {
 
 	private static final long serialVersionUID = 1579033107880707099L;
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 *
 	 * @see com.xively.client.models.DomainObject#setId(java.lang.String)
 	 */
 	@Override
-	public void setId(String id) {
+	public DomainObject setId(String id) {
 		this.id = id;
+
+		return this;
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 *
 	 * @see com.xively.client.models.DomainObject#getId()
 	 */
 	@Override
@@ -38,16 +44,18 @@ public abstract class DomainObjectImpl implements DomainObject {
 
 	@Override
 	public boolean equals(Object obj) {
-		if (obj == null) { return false; }
-		if (this == obj) { return true; }
+		if (obj == null) {
+			return false;
+		}
+		if (this == obj) {
+			return true;
+		}
 		if (obj.getClass() != getClass()) {
 			return false;
 		}
 
 		DomainObject other = (DomainObject) obj;
 
-		return new EqualsBuilder().
-				append(getId(), other.getId())
-				.isEquals();
+		return new EqualsBuilder().append(getId(), other.getId()).isEquals();
 	}
 }
