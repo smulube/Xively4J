@@ -6,6 +6,7 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNull;
 
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 
 import com.xively.client.TestHelper;
@@ -52,6 +53,7 @@ public class ProductTest {
 	}
 
 	@Test
+	@Ignore
 	public void parsingJson() {
 		Product product = JsonUtils.fromJson(this.json, Product.class);
 		assertEquals("Product", product.getName());

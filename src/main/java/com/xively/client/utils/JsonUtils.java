@@ -15,12 +15,16 @@ import com.google.gson.JsonParseException;
 import com.google.gson.JsonPrimitive;
 import com.google.gson.JsonSerializationContext;
 import com.google.gson.JsonSerializer;
+import com.xively.client.models.Channel;
+import com.xively.client.models.Feed;
 import com.xively.client.models.Location;
 import com.xively.client.models.Location.Disposition;
 import com.xively.client.models.Location.Domain;
 import com.xively.client.models.Location.Exposure;
+import com.xively.client.models.Product;
 import com.xively.client.models.Unit;
 import com.xively.client.models.Unit.IFCClassification;
+import com.xively.client.utils.json.ProductDeserializer;
 
 /**
  * @author sam
@@ -28,26 +32,8 @@ import com.xively.client.models.Unit.IFCClassification;
  */
 public abstract class JsonUtils {
 
-	private static final Gson gson = createGson();
-
-	private static class IFCClassificationSerializer implements
-			JsonSerializer<Unit.IFCClassification> {
-
-		/*
-		 * (non-Javadoc)
-		 *
-		 * @see com.google.gson.JsonSerializer#serialize(java.lang.Object,
-		 * java.lang.reflect.Type, com.google.gson.JsonSerializationContext)
-		 */
-		@Override
-		public JsonElement serialize(IFCClassification unitType,
-				Type typeOfSrc, JsonSerializationContext context) {
-			return new JsonPrimitive(unitType.getValue());
-		}
-	}
-
-	private static class IFCClassificationDeserializer implements
-			JsonDeserializer<Unit.IFCClassification> {
+	private static class DispositionDeserializer implements
+			JsonDeserializer<Location.Disposition> {
 
 		/*
 		 * (non-Javadoc)
@@ -57,16 +43,16 @@ public abstract class JsonUtils {
 		 * , java.lang.reflect.Type, com.google.gson.JsonDeserializationContext)
 		 */
 		@Override
-		public IFCClassification deserialize(JsonElement json, Type typeOfT,
+		public Disposition deserialize(JsonElement json, Type typeOfT,
 				JsonDeserializationContext context) throws JsonParseException {
-			return Unit.IFCClassification.fromString(json.getAsJsonPrimitive()
+			return Location.Disposition.fromString(json.getAsJsonPrimitive()
 					.getAsString());
 		}
 
 	}
 
-	private static class DomainSerializer implements
-			JsonSerializer<Location.Domain> {
+	private static class DispositionSerializer implements
+			JsonSerializer<Location.Disposition> {
 
 		/*
 		 * (non-Javadoc)
@@ -75,9 +61,9 @@ public abstract class JsonUtils {
 		 * java.lang.reflect.Type, com.google.gson.JsonSerializationContext)
 		 */
 		@Override
-		public JsonElement serialize(Domain domain, Type domainType,
+		public JsonElement serialize(Disposition disposition, Type domainType,
 				JsonSerializationContext context) {
-			return new JsonPrimitive(domain.getValue());
+			return new JsonPrimitive(disposition.getValue());
 		}
 
 	}
@@ -101,8 +87,8 @@ public abstract class JsonUtils {
 
 	}
 
-	private static class DispositionSerializer implements
-			JsonSerializer<Location.Disposition> {
+	private static class DomainSerializer implements
+			JsonSerializer<Location.Domain> {
 
 		/*
 		 * (non-Javadoc)
@@ -111,45 +97,9 @@ public abstract class JsonUtils {
 		 * java.lang.reflect.Type, com.google.gson.JsonSerializationContext)
 		 */
 		@Override
-		public JsonElement serialize(Disposition disposition, Type domainType,
+		public JsonElement serialize(Domain domain, Type domainType,
 				JsonSerializationContext context) {
-			return new JsonPrimitive(disposition.getValue());
-		}
-
-	}
-
-	private static class DispositionDeserializer implements
-			JsonDeserializer<Location.Disposition> {
-
-		/*
-		 * (non-Javadoc)
-		 *
-		 * @see
-		 * com.google.gson.JsonDeserializer#deserialize(com.google.gson.JsonElement
-		 * , java.lang.reflect.Type, com.google.gson.JsonDeserializationContext)
-		 */
-		@Override
-		public Disposition deserialize(JsonElement json, Type typeOfT,
-				JsonDeserializationContext context) throws JsonParseException {
-			return Location.Disposition.fromString(json.getAsJsonPrimitive()
-					.getAsString());
-		}
-
-	}
-
-	private static class ExposureSerializer implements
-			JsonSerializer<Location.Exposure> {
-
-		/*
-		 * (non-Javadoc)
-		 *
-		 * @see com.google.gson.JsonSerializer#serialize(java.lang.Object,
-		 * java.lang.reflect.Type, com.google.gson.JsonSerializationContext)
-		 */
-		@Override
-		public JsonElement serialize(Exposure exposure, Type domainType,
-				JsonSerializationContext context) {
-			return new JsonPrimitive(exposure.getValue());
+			return new JsonPrimitive(domain.getValue());
 		}
 
 	}
@@ -172,6 +122,60 @@ public abstract class JsonUtils {
 		}
 
 	}
+
+	private static class ExposureSerializer implements
+			JsonSerializer<Location.Exposure> {
+
+		/*
+		 * (non-Javadoc)
+		 *
+		 * @see com.google.gson.JsonSerializer#serialize(java.lang.Object,
+		 * java.lang.reflect.Type, com.google.gson.JsonSerializationContext)
+		 */
+		@Override
+		public JsonElement serialize(Exposure exposure, Type domainType,
+				JsonSerializationContext context) {
+			return new JsonPrimitive(exposure.getValue());
+		}
+
+	}
+
+	private static class IFCClassificationDeserializer implements
+			JsonDeserializer<Unit.IFCClassification> {
+
+		/*
+		 * (non-Javadoc)
+		 *
+		 * @see
+		 * com.google.gson.JsonDeserializer#deserialize(com.google.gson.JsonElement
+		 * , java.lang.reflect.Type, com.google.gson.JsonDeserializationContext)
+		 */
+		@Override
+		public IFCClassification deserialize(JsonElement json, Type typeOfT,
+				JsonDeserializationContext context) throws JsonParseException {
+			return Unit.IFCClassification.fromString(json.getAsJsonPrimitive()
+					.getAsString());
+		}
+
+	}
+
+	private static class IFCClassificationSerializer implements
+			JsonSerializer<Unit.IFCClassification> {
+
+		/*
+		 * (non-Javadoc)
+		 *
+		 * @see com.google.gson.JsonSerializer#serialize(java.lang.Object,
+		 * java.lang.reflect.Type, com.google.gson.JsonSerializationContext)
+		 */
+		@Override
+		public JsonElement serialize(IFCClassification unitType,
+				Type typeOfSrc, JsonSerializationContext context) {
+			return new JsonPrimitive(unitType.getValue());
+		}
+	}
+
+	private static final Gson gson = createGson();
 
 	/**
 	 * Create our Gson instance.
@@ -198,29 +202,31 @@ public abstract class JsonUtils {
 				new ExposureSerializer());
 		builder.registerTypeAdapter(Location.Exposure.class,
 				new ExposureDeserializer());
+		builder.registerTypeAdapter(Product.class, new ProductDeserializer());
 
 		return builder.create();
 	}
 
 	/**
-	 * Get reusable pre-configured {@link Gson} instance.
+	 * Convert content of reader to given type
 	 *
-	 * @return Gson instance
+	 * @param reader
+	 * @param type
+	 * @return instance of type
 	 */
-	public static final Gson getGson() {
-		return gson;
+	public static final <V> V fromJson(Reader reader, Class<V> type) {
+		return gson.fromJson(reader, type);
 	}
 
 	/**
-	 * Convert object to json
+	 * Convert content of reader to given type
 	 *
-	 * @param object
-	 * @return json string
+	 * @param reader
+	 * @param type
+	 * @return instance of type
 	 */
-	public static final String toJson(final Object object) {
-		JsonElement jsonElement = gson.toJsonTree(object);
-		jsonElement.getAsJsonObject().addProperty("version", "1.0.0");
-		return gson.toJson(jsonElement);
+	public static final <V> V fromJson(Reader reader, Type type) {
+		return gson.fromJson(reader, type);
 	}
 
 	/**
@@ -246,24 +252,26 @@ public abstract class JsonUtils {
 	}
 
 	/**
-	 * Convert content of reader to given type
+	 * Get reusable pre-configured {@link Gson} instance.
 	 *
-	 * @param reader
-	 * @param type
-	 * @return instance of type
+	 * @return Gson instance
 	 */
-	public static final <V> V fromJson(Reader reader, Class<V> type) {
-		return gson.fromJson(reader, type);
+	public static final Gson getGson() {
+		return gson;
 	}
 
 	/**
-	 * Convert content of reader to given type
+	 * Convert object to json
 	 *
-	 * @param reader
-	 * @param type
-	 * @return instance of type
+	 * @param object
+	 * @return json string
 	 */
-	public static final <V> V fromJson(Reader reader, Type type) {
-		return gson.fromJson(reader, type);
+	public static final String toJson(final Object object) {
+		JsonElement jsonElement = gson.toJsonTree(object);
+		if (object.getClass().equals(Feed.class)
+				|| object.getClass().equals(Channel.class)) {
+			jsonElement.getAsJsonObject().addProperty("version", "1.0.0");
+		}
+		return gson.toJson(jsonElement);
 	}
 }

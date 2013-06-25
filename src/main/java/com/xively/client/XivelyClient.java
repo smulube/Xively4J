@@ -187,6 +187,11 @@ public class XivelyClient {
 		return this;
 	}
 
+	/**
+	 *
+	 * @param connectTimeout
+	 * @return
+	 */
 	public XivelyClient setConnectTimeout(final int connectTimeout) {
 		if (connectTimeout > 0) {
 			this.connectTimeout = connectTimeout;
@@ -315,6 +320,9 @@ public class XivelyClient {
 		request.setDoOutput(true);
 		if (object != null) {
 			request.setRequestProperty(HEADER_CONTENT_TYPE, CONTENT_TYPE_JSON);
+
+			logger.info(JsonUtils.toJson(object));
+
 			byte[] data = JsonUtils.toJson(object).getBytes(
 					XivelyConstants.CHARSET_UTF8);
 			request.setFixedLengthStreamingMode(data.length);
