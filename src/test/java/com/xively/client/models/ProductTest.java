@@ -4,9 +4,14 @@ package com.xively.client.models;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertTrue;
+
+import java.net.URI;
+import java.net.URISyntaxException;
+import java.util.ArrayList;
+import java.util.List;
 
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Test;
 
 import com.xively.client.TestHelper;
@@ -53,12 +58,45 @@ public class ProductTest {
 	}
 
 	@Test
-	@Ignore
-	public void parsingJson() {
+	public void parsingJson() throws URISyntaxException {
 		Product product = JsonUtils.fromJson(this.json, Product.class);
 		assertEquals("Product", product.getName());
 		assertEquals("Product description", product.getDescription());
 		assertEquals("2AKILjrxZpy3CmiTrxmq", product.getId());
+		assertEquals("e1c263198afcb4e198145f3e406817c30bde39fb",
+				product.getSecret());
+		assertEquals("deploy", product.getState());
+		assertTrue(product.getDevicesCount().intValue() == 12);
+		assertTrue(product.getActivatedDevicesCount().intValue() == 3);
 
+		FeedDefaults fd = product.getFeedDefaults();
+
+		assertEquals("Product feed", fd.getTitle());
+		assertEquals("Product feed description", fd.getDescription());
+		List<String> feedTags = new ArrayList<String>();
+		feedTags.add("product_tag");
+		assertEquals(feedTags, fd.getTags());
+
+		assertTrue(fd.isPrivate());
+		assertEquals(new URI("http://product.com"), fd.getWebsite());
+
+		assertTrue(fd.getChannels().size() == 1);
+
+		ChannelDefaults cd = fd.getChannels().get(0);
+		assertEquals("sensor1", cd.getId());
+
+		List<String> channelTags = new ArrayList<String>();
+		channelTags.add("temperature");
+		channelTags.add("temp");
+
+		assertEquals(channelTags, cd.getTags());
+
+		Unit unit = new Unit();
+		unit.setLabel("Celsius");
+		unit.setSymbol("C");
+
+		assertEquals(unit, cd.getUnit());
+
+		assertEquals("username", product.getUser());
 	}
 }

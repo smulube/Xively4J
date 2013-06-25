@@ -5,6 +5,8 @@ package com.xively.client.models;
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.apache.commons.lang3.builder.ToStringBuilder;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.google.gson.JsonObject;
 import com.google.gson.annotations.SerializedName;
@@ -30,6 +32,9 @@ public class Product extends DomainObjectImpl {
 	private transient Integer activatedDevicesCount;
 	@SerializedName("feed_defaults")
 	private FeedDefaults feedDefaults;
+	private String user;
+
+	private transient Logger logger = LoggerFactory.getLogger(Product.class);
 
 	/**
 	 * Default constructor
@@ -45,12 +50,13 @@ public class Product extends DomainObjectImpl {
 		this.description = productJson.get("description").getAsString();
 		this.id = productJson.get("product_id").getAsString();
 		this.secret = productJson.get("secret").getAsString();
-		this.state = productJson.get("secret").getAsString();
+		this.state = productJson.get("state").getAsString();
 		this.devicesCount = productJson.get("devices_count").getAsInt();
 		this.activatedDevicesCount = productJson.get("activated_devices_count")
 				.getAsInt();
 		this.feedDefaults = JsonUtils.fromJson(productJson.get("feed_defaults")
-				.getAsString(), FeedDefaults.class);
+				.toString(), FeedDefaults.class);
+		this.user = productJson.get("user").getAsString();
 	}
 
 	/*
@@ -153,6 +159,13 @@ public class Product extends DomainObjectImpl {
 	 */
 	public String getState() {
 		return state;
+	}
+
+	/**
+	 * @return the user
+	 */
+	public String getUser() {
+		return user;
 	}
 
 	/*
