@@ -31,6 +31,9 @@ client.feeds().updateFeed(feed);
 ```
 
 ```java
+client.channels().createChannel(feed, channel);
+
+```java
 client.channels(feed).createChannel(channel);
 client.channels(feed).deleteChannel("sensor1");
 ```
