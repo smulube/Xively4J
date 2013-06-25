@@ -1,0 +1,25 @@
+{
+  "product":{
+    "name":"Product",
+    "description":"Product description",
+    "product_id":"2AKILjrxZpy3CmiTrxmq",
+    "secret":"e1c263198afcb4e198145f3e406817c30bde39fb",
+    "state":"deploy",
+    "devices_count":0,
+    "activated_devices_count":0,
+    "feed_defaults":{
+      "title":"Product feed",
+      "description":"Product feed description",
+      "tags":["product_tag"],
+      "private":"true",
+      "website":"http://product.com",
+      "datastreams":[
+        {"id":"sensor1",
+         "tags":["temperature","temp"],
+         "unit":{"symbol":"C","label":"Celsius"}
+        }
+      ]
+    },
+    "user":"username"
+  }
+}
