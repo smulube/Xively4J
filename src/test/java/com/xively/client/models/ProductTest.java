@@ -54,11 +54,10 @@ public class ProductTest {
 				.getDescription());
 		assertEquals(new FeedDefaults(),
 				product.setFeedDefaults(new FeedDefaults()).getFeedDefaults());
-		assertEquals("deploy", product.setState("deploy").getState());
 	}
 
 	@Test
-	public void parsingJson() throws URISyntaxException {
+	public void parsingFullJson() throws URISyntaxException {
 		Product product = JsonUtils.fromJson(this.json, Product.class);
 		assertEquals("Product", product.getName());
 		assertEquals("Product description", product.getDescription());
@@ -98,5 +97,62 @@ public class ProductTest {
 		assertEquals(unit, cd.getUnit());
 
 		assertEquals("username", product.getUser());
+	}
+
+	@Test
+	public void serializingToJson() throws URISyntaxException {
+		Product product = new Product();
+		product.setName("New Batch");
+		product.setDescription("New description");
+
+		FeedDefaults feedDefaults = new FeedDefaults();
+		feedDefaults.setTitle("New feed");
+		feedDefaults.setDescription("New feed description");
+		feedDefaults.setPrivate(false);
+		feedDefaults.setWebsite(new URI("http://example.com"));
+
+		List<String> feedTags = new ArrayList<String>();
+		feedTags.add("feed_tag");
+		feedDefaults.setTags(feedTags);
+
+		List<ChannelDefaults> channels = new ArrayList<ChannelDefaults>();
+
+		ChannelDefaults cd = new ChannelDefaults();
+		cd.setId("channel1");
+		List<String> channelTags = new ArrayList<String>();
+		channelTags.add("channel_tag1");
+		channelTags.add("channel_tag2");
+		cd.setTags(channelTags);
+		Unit unit = new Unit();
+		unit.setLabel("Celsius");
+		unit.setSymbol("C");
+		cd.setUnit(unit);
+
+		channels.add(cd);
+
+		feedDefaults.setChannels(channels);
+		product.setFeedDefaults(feedDefaults);
+
+		String json = JsonUtils.toJson(product);
+
+		Product parsedProduct = JsonUtils.fromJson(json, Product.class);
+
+		assertEquals(parsedProduct.getName(), product.getName());
+		assertEquals(parsedProduct.getDescription(), product.getDescription());
+		assertEquals(parsedProduct.getFeedDefaults(), product.getFeedDefaults());
+	}
+
+	@Test
+	public void serializingWithoutFeedDefaults() {
+		Product product = new Product();
+		product.setName("name");
+		product.setDescription("description");
+
+		String json = JsonUtils.toJson(product);
+
+		Product parsedProduct = JsonUtils.fromJson(json, Product.class);
+
+		assertEquals("name", parsedProduct.getName());
+		assertEquals("description", parsedProduct.getDescription());
 	}
 }

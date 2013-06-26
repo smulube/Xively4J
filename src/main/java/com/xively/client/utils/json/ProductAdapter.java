@@ -4,6 +4,9 @@ package com.xively.client.utils.json;
 
 import java.lang.reflect.Type;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.google.gson.JsonDeserializationContext;
 import com.google.gson.JsonDeserializer;
 import com.google.gson.JsonElement;
@@ -17,7 +20,10 @@ import com.xively.client.models.Product;
  * @author sam
  *
  */
-public class ProductAdapter implements JsonDeserializer<Product>, JsonSerializer<Product> {
+public class ProductAdapter implements JsonDeserializer<Product>,
+		JsonSerializer<Product> {
+
+	private final Logger logger = LoggerFactory.getLogger(ProductAdapter.class);
 
 	/*
 	 * (non-Javadoc)
@@ -30,19 +36,33 @@ public class ProductAdapter implements JsonDeserializer<Product>, JsonSerializer
 	public Product deserialize(JsonElement json, Type typeOfT,
 			JsonDeserializationContext context) throws JsonParseException {
 
-		JsonObject productJson = json.getAsJsonObject().get("product").getAsJsonObject();
+		JsonObject productJson = json.getAsJsonObject().get("product")
+				.getAsJsonObject();
 
 		return new Product(productJson);
 	}
 
-	/* (non-Javadoc)
-	 * @see com.google.gson.JsonSerializer#serialize(java.lang.Object, java.lang.reflect.Type, com.google.gson.JsonSerializationContext)
+	/*
+	 * (non-Javadoc)
+	 *
+	 * @see com.google.gson.JsonSerializer#serialize(java.lang.Object,
+	 * java.lang.reflect.Type, com.google.gson.JsonSerializationContext)
 	 */
 	@Override
 	public JsonElement serialize(Product product, Type domainType,
 			JsonSerializationContext context) {
-		// TODO Auto-generated method stub
-		return null;
+
+		JsonObject productJson = new JsonObject();
+		productJson.addProperty("name", product.getName());
+		productJson.addProperty("description", product.getDescription());
+		productJson.add("feed_defaults",
+				context.serialize(product.getFeedDefaults()));
+		productJson.addProperty("state", product.getState());
+
+		JsonObject json = new JsonObject();
+		json.add("product", productJson);
+
+		return json;
 	}
 
 }

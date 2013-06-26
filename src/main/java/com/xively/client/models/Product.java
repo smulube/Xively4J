@@ -8,6 +8,7 @@ import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.annotations.SerializedName;
 import com.xively.client.utils.JsonUtils;
@@ -25,7 +26,7 @@ public class Product extends DomainObjectImpl {
 	@SerializedName("product_id")
 	private transient String id;
 	private transient String secret;
-	private String state;
+	private transient String state;
 	@SerializedName("devices_count")
 	private transient Integer devicesCount;
 	@SerializedName("activated_devices_count")
@@ -48,15 +49,44 @@ public class Product extends DomainObjectImpl {
 	public Product(JsonObject productJson) {
 		this.name = productJson.get("name").getAsString();
 		this.description = productJson.get("description").getAsString();
-		this.id = productJson.get("product_id").getAsString();
-		this.secret = productJson.get("secret").getAsString();
-		this.state = productJson.get("state").getAsString();
-		this.devicesCount = productJson.get("devices_count").getAsInt();
-		this.activatedDevicesCount = productJson.get("activated_devices_count")
-				.getAsInt();
-		this.feedDefaults = JsonUtils.fromJson(productJson.get("feed_defaults")
-				.toString(), FeedDefaults.class);
-		this.user = productJson.get("user").getAsString();
+		this.id = getAsString(productJson.get("product_id"));
+		this.secret = getAsString(productJson.get("secret"));
+		this.state = getAsString(productJson.get("state"));
+		this.devicesCount = getAsInt(productJson.get("devices_count"));
+		this.activatedDevicesCount = getAsInt(productJson
+				.get("activated_devices_count"));
+
+		if (productJson.get("feed_defaults") != null) {
+			this.feedDefaults = JsonUtils.fromJson(
+					productJson.get("feed_defaults").toString(),
+					FeedDefaults.class);
+		}
+
+		this.user = getAsString(productJson.get("user"));
+	}
+
+	/**
+	 * @param jsonElement
+	 * @return
+	 */
+	private Integer getAsInt(JsonElement jsonElement) {
+		if (jsonElement != null) {
+			return jsonElement.getAsInt();
+		} else {
+			return null;
+		}
+	}
+
+	/**
+	 * @param jsonElement
+	 * @return
+	 */
+	private String getAsString(JsonElement jsonElement) {
+		if (jsonElement != null) {
+			return jsonElement.getAsString();
+		} else {
+			return null;
+		}
 	}
 
 	/*
@@ -207,17 +237,6 @@ public class Product extends DomainObjectImpl {
 	 */
 	public Product setName(String name) {
 		this.name = name;
-
-		return this;
-	}
-
-	/**
-	 * @param state
-	 *            the state to set
-	 * @return
-	 */
-	public Product setState(String state) {
-		this.state = state;
 
 		return this;
 	}
