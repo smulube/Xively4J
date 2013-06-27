@@ -479,20 +479,6 @@ public class XivelyClient {
     /**
      * @param response
      * @return
-     */
-    private String extractIdFromLocation(HttpURLConnection response) {
-        String location = response.getHeaderField(HEADER_LOCATION);
-        if (location != null) {
-            String[] tokens = location.split("/");
-            return tokens[tokens.length - 1];
-        } else {
-            return null;
-        }
-    }
-
-    /**
-     * @param response
-     * @return
      * @throws IOException
      */
     private InputStream getStream(HttpURLConnection response)
