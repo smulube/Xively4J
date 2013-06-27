@@ -20,6 +20,8 @@ public interface XivelyConstants {
 
 	String SEGMENT_DATAPOINTS = "datapoints";
 
+	String SEGMENT_PRODUCTS = "products";
+
 	String CONTENT_TYPE_JSON = "application/json";
 
 	String CHARSET_UTF8 = "UTF-8";

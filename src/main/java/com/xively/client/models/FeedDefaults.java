@@ -193,7 +193,8 @@ public class FeedDefaults implements Serializable {
 			.append("description", this.description)
 			.append("website", this.website)
 			.append("tags", this.tags)
-			.append("private", this.isPrivate).toString();
+			.append("private", this.isPrivate)
+			.append("channels", this.channels).toString();
 	}
 
 }

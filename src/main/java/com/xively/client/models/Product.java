@@ -15,245 +15,259 @@ import com.xively.client.utils.JsonUtils;
 
 /**
  * @author sam
- *
+ * 
  */
 public class Product extends DomainObjectImpl {
 
-	private static final long serialVersionUID = 8483131778172380123L;
+    private static final long serialVersionUID = 8483131778172380123L;
 
-	private String name;
-	private String description;
-	@SerializedName("product_id")
-	private transient String id;
-	private transient String secret;
-	private transient String state;
-	@SerializedName("devices_count")
-	private transient Integer devicesCount;
-	@SerializedName("activated_devices_count")
-	private transient Integer activatedDevicesCount;
-	@SerializedName("feed_defaults")
-	private FeedDefaults feedDefaults;
-	private String user;
+    private String name;
+    private String description;
+    @SerializedName("product_id")
+    private transient String id;
+    private transient String secret;
+    private transient String state;
+    @SerializedName("devices_count")
+    private transient Integer devicesCount;
+    @SerializedName("activated_devices_count")
+    private transient Integer activatedDevicesCount;
+    @SerializedName("feed_defaults")
+    private FeedDefaults feedDefaults;
+    private String user;
 
-	private transient Logger logger = LoggerFactory.getLogger(Product.class);
+    private transient Logger logger = LoggerFactory.getLogger(Product.class);
 
-	/**
-	 * Default constructor
-	 */
-	public Product() {
-	}
+    /**
+     * Default constructor
+     */
+    public Product() {
+    }
 
-	/**
-	 * @param productJson
-	 */
-	public Product(JsonObject productJson) {
-		this.name = productJson.get("name").getAsString();
-		this.description = productJson.get("description").getAsString();
-		this.id = getAsString(productJson.get("product_id"));
-		this.secret = getAsString(productJson.get("secret"));
-		this.state = getAsString(productJson.get("state"));
-		this.devicesCount = getAsInt(productJson.get("devices_count"));
-		this.activatedDevicesCount = getAsInt(productJson
-				.get("activated_devices_count"));
+    /**
+     * @param productJson
+     */
+    public Product(JsonObject productJson) {
+        this.name = productJson.get("name").getAsString();
+        this.description = productJson.get("description").getAsString();
+        this.id = getAsString(productJson.get("product_id"));
+        this.secret = getAsString(productJson.get("secret"));
+        this.state = getAsString(productJson.get("state"));
+        this.devicesCount = getAsInt(productJson.get("devices_count"));
+        this.activatedDevicesCount = getAsInt(productJson
+                .get("activated_devices_count"));
 
-		if (productJson.get("feed_defaults") != null) {
-			this.feedDefaults = JsonUtils.fromJson(
-					productJson.get("feed_defaults").toString(),
-					FeedDefaults.class);
-		}
+        if (productJson.get("feed_defaults") != null) {
+            this.feedDefaults = JsonUtils.fromJson(
+                    productJson.get("feed_defaults").toString(),
+                    FeedDefaults.class);
+        }
 
-		this.user = getAsString(productJson.get("user"));
-	}
+        this.user = getAsString(productJson.get("user"));
+    }
 
-	/**
-	 * @param jsonElement
-	 * @return
-	 */
-	private Integer getAsInt(JsonElement jsonElement) {
-		if (jsonElement != null) {
-			return jsonElement.getAsInt();
-		} else {
-			return null;
-		}
-	}
+    /*
+     * (non-Javadoc)
+     * 
+     * @see
+     * com.xively.client.models.DomainObject#deepEquals(com.xively.client.models
+     * .DomainObject)
+     */
+    @Override
+    public boolean deepEquals(DomainObject obj) {
+        if (!this.equals(obj)) {
+            return false;
+        }
 
-	/**
-	 * @param jsonElement
-	 * @return
-	 */
-	private String getAsString(JsonElement jsonElement) {
-		if (jsonElement != null) {
-			return jsonElement.getAsString();
-		} else {
-			return null;
-		}
-	}
+        Product other = (Product) obj;
 
-	/*
-	 * (non-Javadoc)
-	 *
-	 * @see
-	 * com.xively.client.models.DomainObject#deepEquals(com.xively.client.models
-	 * .DomainObject)
-	 */
-	@Override
-	public boolean deepEquals(DomainObject obj) {
-		if (!this.equals(obj)) {
-			return false;
-		}
+        return new EqualsBuilder()
+        .append(this.name, other.name)
+        .append(this.description, other.description)
+        .append(this.secret, other.secret)
+        .append(this.state, other.state)
+        .append(this.devicesCount, other.devicesCount)
+        .append(this.activatedDevicesCount, other.activatedDevicesCount)
+        .append(this.feedDefaults, other.feedDefaults).isEquals();
+    }
 
-		Product other = (Product) obj;
+    /*
+     * (non-Javadoc)
+     * 
+     * @see com.xively.client.models.DomainObjectImpl#equals(java.lang.Object)
+     */
+    @Override
+    public boolean equals(Object obj) {
+        if (obj == null) {
+            return false;
+        }
+        if (this == obj) {
+            return true;
+        }
+        if (obj.getClass() != getClass()) {
+            return false;
+        }
 
-		return new EqualsBuilder().append(name, other.name)
-				.append(description, other.description)
-				.append(secret, other.secret).append(state, other.state)
-				.append(devicesCount, other.devicesCount)
-				.append(activatedDevicesCount, other.activatedDevicesCount)
-				.append(feedDefaults, other.feedDefaults).isEquals();
-	}
+        DomainObject other = (DomainObject) obj;
 
-	/*
-	 * (non-Javadoc)
-	 *
-	 * @see com.xively.client.models.DomainObjectImpl#equals(java.lang.Object)
-	 */
-	@Override
-	public boolean equals(Object obj) {
-		if (obj == null) {
-			return false;
-		}
-		if (this == obj) {
-			return true;
-		}
-		if (obj.getClass() != getClass()) {
-			return false;
-		}
+        return new EqualsBuilder().append(getId(), other.getId()).isEquals();
+    }
 
-		DomainObject other = (DomainObject) obj;
+    /**
+     * @return the activated_devices_count
+     */
+    public Integer getActivatedDevicesCount() {
+        return this.activatedDevicesCount;
+    }
 
-		return new EqualsBuilder().append(getId(), other.getId()).isEquals();
-	}
+    /**
+     * @return the description
+     */
+    public String getDescription() {
+        return this.description;
+    }
 
-	/**
-	 * @return the activated_devices_count
-	 */
-	public Integer getActivatedDevicesCount() {
-		return activatedDevicesCount;
-	}
+    /**
+     * @return the devicesCount
+     */
+    public Integer getDevicesCount() {
+        return this.devicesCount;
+    }
 
-	/**
-	 * @return the description
-	 */
-	public String getDescription() {
-		return description;
-	}
+    /**
+     * @return the feedDefaults
+     */
+    public FeedDefaults getFeedDefaults() {
+        return this.feedDefaults;
+    }
 
-	/**
-	 * @return the devicesCount
-	 */
-	public Integer getDevicesCount() {
-		return devicesCount;
-	}
+    /**
+     * @return the id
+     */
+    @Override
+    public String getId() {
+        return this.id;
+    }
 
-	/**
-	 * @return the feedDefaults
-	 */
-	public FeedDefaults getFeedDefaults() {
-		return feedDefaults;
-	}
+    /**
+     * @return the name
+     */
+    public String getName() {
+        return this.name;
+    }
 
-	/**
-	 * @return the id
-	 */
-	@Override
-	public String getId() {
-		return id;
-	}
+    /**
+     * @return the secret
+     */
+    public String getSecret() {
+        return this.secret;
+    }
 
-	/**
-	 * @return the name
-	 */
-	public String getName() {
-		return name;
-	}
+    /**
+     * @return the state
+     */
+    public String getState() {
+        return this.state;
+    }
 
-	/**
-	 * @return the secret
-	 */
-	public String getSecret() {
-		return secret;
-	}
+    /**
+     * @return the user
+     */
+    public String getUser() {
+        return this.user;
+    }
 
-	/**
-	 * @return the state
-	 */
-	public String getState() {
-		return state;
-	}
+    /*
+     * (non-Javadoc)
+     * 
+     * @see com.xively.client.models.DomainObjectImpl#hashCode()
+     */
+    @Override
+    public int hashCode() {
+        return new HashCodeBuilder(89, 179).append(getId()).toHashCode();
+    }
 
-	/**
-	 * @return the user
-	 */
-	public String getUser() {
-		return user;
-	}
+    /**
+     * @param description
+     *            the description to set
+     * @return
+     */
+    public Product setDescription(String description) {
+        this.description = description;
 
-	/*
-	 * (non-Javadoc)
-	 *
-	 * @see com.xively.client.models.DomainObjectImpl#hashCode()
-	 */
-	@Override
-	public int hashCode() {
-		return new HashCodeBuilder(89, 179).append(getId()).toHashCode();
-	}
+        return this;
+    }
 
-	/**
-	 * @param description
-	 *            the description to set
-	 * @return
-	 */
-	public Product setDescription(String description) {
-		this.description = description;
+    /**
+     * @param feedDefaults
+     *            the feedDefaults to set
+     * @return
+     */
+    public Product setFeedDefaults(FeedDefaults feedDefaults) {
+        this.feedDefaults = feedDefaults;
 
-		return this;
-	}
+        return this;
+    }
 
-	/**
-	 * @param feedDefaults
-	 *            the feedDefaults to set
-	 * @return
-	 */
-	public Product setFeedDefaults(FeedDefaults feedDefaults) {
-		this.feedDefaults = feedDefaults;
+    /**
+     * @param id
+     *            the id to set
+     * @return
+     */
+    @Override
+    public Product setId(String id) {
+        this.id = id;
 
-		return this;
-	}
+        return this;
+    }
 
-	/**
-	 * @param name
-	 *            the name to set
-	 * @return
-	 */
-	public Product setName(String name) {
-		this.name = name;
+    /**
+     * @param name
+     *            the name to set
+     * @return
+     */
+    public Product setName(String name) {
+        this.name = name;
 
-		return this;
-	}
+        return this;
+    }
 
-	/*
-	 * (non-Javadoc)
-	 *
-	 * @see java.lang.Object#toString()
-	 */
-	@Override
-	public String toString() {
-		return new ToStringBuilder(this).append("name", this.name)
-				.append("description", this.description).append("id", this.id)
-				.append("secret", this.secret).append("state", this.state)
-				.append("devicesCount", this.devicesCount)
-				.append("activatedDevicesCount", this.activatedDevicesCount)
-				.append("feedDefaults", this.feedDefaults).toString();
-	}
+    /*
+     * (non-Javadoc)
+     * 
+     * @see java.lang.Object#toString()
+     */
+    @Override
+    public String toString() {
+        return new ToStringBuilder(this).append("name", this.name)
+                .append("description", this.description).append("id", this.id)
+                .append("secret", this.secret).append("state", this.state)
+                .append("devicesCount", this.devicesCount)
+                .append("activatedDevicesCount", this.activatedDevicesCount)
+                .append("feedDefaults", this.feedDefaults).toString();
+    }
+
+    /**
+     * @param jsonElement
+     * @return
+     */
+    private Integer getAsInt(JsonElement jsonElement) {
+        if (jsonElement != null) {
+            return jsonElement.getAsInt();
+        } else {
+            return null;
+        }
+    }
+
+    /**
+     * @param jsonElement
+     * @return
+     */
+    private String getAsString(JsonElement jsonElement) {
+        if (jsonElement != null) {
+            return jsonElement.getAsString();
+        } else {
+            return null;
+        }
+    }
 
 }
