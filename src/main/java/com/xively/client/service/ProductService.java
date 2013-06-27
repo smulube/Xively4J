@@ -38,6 +38,49 @@ public class ProductService extends BaseService {
     }
 
     /**
+     *
+     * @param product
+     * @return
+     * @throws IOException
+     */
+    public Product create(Product product) throws IOException {
+        checkDomainObject(product, "Product");
+
+        StringBuilder uri = new StringBuilder(this.client.getBaseUri());
+        uri.append("/").append(XivelyConstants.SEGMENT_PRODUCTS);
+
+        XivelyRequest request = new XivelyRequest();
+        request.setUri(uri);
+        request.setObject(product);
+
+        XivelyResponse response = this.client.post(request);
+
+        product = (Product) response.getDomainObject();
+        product.setId(response.getIdFromLocation());
+
+        return product;
+    }
+
+    /**
+     * Delete a product by id.
+     *
+     * @param id
+     * @throws IOException
+     */
+    public void delete(String id) throws IOException {
+        checkDomainObjectId(id, "Product");
+
+        StringBuilder uri = new StringBuilder(this.client.getBaseUri());
+        uri.append("/").append(XivelyConstants.SEGMENT_PRODUCTS);
+        uri.append("/").append(id);
+
+        XivelyRequest request = new XivelyRequest();
+        request.setUri(uri);
+
+        this.client.delete(request);
+    }
+
+    /**
      * Get a product by ID
      *
      * @param id
@@ -60,7 +103,7 @@ public class ProductService extends BaseService {
     }
 
     /**
-     * 
+     *
      * @param product
      * @return
      * @throws IOException
@@ -69,8 +112,6 @@ public class ProductService extends BaseService {
         checkDomainObject(product, "Product");
 
         String id = product.getId();
-
-        this.logger.info(id);
 
         checkDomainObjectId(id, "Product");
 
@@ -81,8 +122,6 @@ public class ProductService extends BaseService {
         XivelyRequest request = new XivelyRequest();
         request.setUri(uri);
         request.setObject(product);
-
-        this.logger.info(request.toString());
 
         return (Product) this.client.put(request).getDomainObject();
     }
