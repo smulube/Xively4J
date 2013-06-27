@@ -145,7 +145,7 @@ public class XivelyClient {
         this.readTimeout = readTimeout;
         this.connectTimeout = connectTimeout;
 
-        this.logger.info("XivelyClient initialized: " + this.baseUri);
+        this.logger.info("XivelyClient initialized: " + this.toString());
     }
 
     public ChannelService channels() {
