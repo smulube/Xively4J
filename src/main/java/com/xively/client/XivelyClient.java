@@ -71,8 +71,8 @@ public class XivelyClient {
     protected static final int HTTP_INTERNAL_SERVER_ERROR = 500;
     protected static final int HTTP_SERVICE_UNAVAILABLE = 503;
 
-    private static final Integer DEFAULT_CONNECT_TIMEOUT = 3000;
-    private static final Integer DEFAULT_READ_TIMEOUT = 3000;
+    private static final Integer DEFAULT_CONNECT_TIMEOUT = 5000;
+    private static final Integer DEFAULT_READ_TIMEOUT = 5000;
 
     protected final String baseUri;
 
@@ -175,7 +175,9 @@ public class XivelyClient {
     public void delete(XivelyRequest request) throws IOException {
         HttpURLConnection httpDelete = createDelete(request.generateUri());
 
-        this.logger.info("DELETE " + request.generateUri());
+        if (this.logger.isDebugEnabled()) {
+            this.logger.info("DELETE " + request.generateUri());
+        }
 
         // implicitly makes the request
         final int statusCode = httpDelete.getResponseCode();
@@ -205,12 +207,12 @@ public class XivelyClient {
     public XivelyResponse get(XivelyRequest request) throws IOException {
         HttpURLConnection httpGet = createGet(request.generateUri());
 
-        this.logger.debug("GET " + request.generateUri());
+        if (this.logger.isDebugEnabled()) {
+            this.logger.debug("GET " + request.generateUri());
+        }
 
         // implicitly performs the request
         final int statusCode = httpGet.getResponseCode();
-
-        this.logger.info(Integer.toString(statusCode));
 
         if (isOk(statusCode)) {
             return new XivelyResponse(httpGet, parseDomainObject(request,
@@ -236,7 +238,9 @@ public class XivelyClient {
     public XivelyResponse post(XivelyRequest request) throws IOException {
         HttpURLConnection httpPost = createPost(request.generateUri());
 
-        this.logger.debug("POST " + request.generateUri());
+        if (this.logger.isDebugEnabled()) {
+            this.logger.debug("POST " + request.generateUri());
+        }
 
         sendObject(httpPost, request.getObject());
 
@@ -269,7 +273,9 @@ public class XivelyClient {
     public XivelyResponse put(XivelyRequest request) throws IOException {
         HttpURLConnection httpPut = createPut(request.generateUri());
 
-        this.logger.debug("PUT " + request.generateUri());
+        if (this.logger.isDebugEnabled()) {
+            this.logger.debug("PUT " + request.generateUri());
+        }
 
         sendObject(httpPut, request.getObject());
 
@@ -403,14 +409,10 @@ public class XivelyClient {
     private IOException createException(HttpURLConnection response) {
         try {
             if (isError(response.getResponseCode())) {
-                this.logger.warn("Is error");
                 final ResponseError error;
                 try {
-                    this.logger.warn("parsing response");
                     error = parseError(response);
-                    this.logger.warn(error.toString());
                 } catch (IOException e) {
-                    this.logger.warn("error parsing response", e);
                     return e;
                 }
                 return new RequestException(error, response.getResponseCode());
@@ -473,15 +475,6 @@ public class XivelyClient {
     // throw createException(response);
     // }
     // }
-
-    /**
-     * @param request
-     * @return
-     */
-    private InputStream createResponseStream(HttpURLConnection request)
-            throws IOException {
-        return request.getInputStream();
-    }
 
     /**
      * @param response
@@ -583,16 +576,12 @@ public class XivelyClient {
     private <T> T parseJson(HttpURLConnection response, Type type)
             throws IOException {
 
-        this.logger.info("Parsing json");
-
         BufferedReader reader = new BufferedReader(new InputStreamReader(
                 getStream(response)));
 
         try {
-            this.logger.info(type.toString());
             return JsonUtils.fromJson(reader, type);
         } catch (JsonParseException jpe) {
-            this.logger.info("Json Parse Exception");
             IOException ioe = new IOException(
                     "Parse error converting JSON to object");
             ioe.initCause(jpe);
@@ -615,7 +604,9 @@ public class XivelyClient {
         if (object != null) {
             request.setRequestProperty(HEADER_CONTENT_TYPE, CONTENT_TYPE_JSON);
 
-            this.logger.info(JsonUtils.toJson(object));
+            if (this.logger.isDebugEnabled()) {
+                this.logger.debug(JsonUtils.toJson(object));
+            }
 
             byte[] data = JsonUtils.toJson(object).getBytes(
                     XivelyConstants.CHARSET_UTF8);
