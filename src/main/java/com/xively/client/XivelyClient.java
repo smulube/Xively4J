@@ -215,8 +215,7 @@ public class XivelyClient {
         final int statusCode = httpGet.getResponseCode();
 
         if (isOk(statusCode)) {
-            return new XivelyResponse(httpGet, parseDomainObject(request,
-                    httpGet));
+            return new XivelyResponse(httpGet, getBody(request, httpGet));
         } else {
             throw createException(httpGet);
         }
@@ -477,6 +476,23 @@ public class XivelyClient {
     // }
 
     /**
+     * @param request
+     * @param response
+     * @return
+     * @throws IOException
+     * @throws IllegalStateException
+     */
+    private Object getBody(XivelyRequest request, HttpURLConnection response)
+            throws IOException {
+        Type type = request.getType();
+        if (type != null) {
+            return parseJson(response, type, request.getCollectionType());
+        } else {
+            return null;
+        }
+    }
+
+    /**
      * @param response
      * @return
      * @throws IOException
@@ -526,23 +542,6 @@ public class XivelyClient {
     }
 
     /**
-     * @param request
-     * @param response
-     * @return
-     * @throws IOException
-     * @throws IllegalStateException
-     */
-    private Object parseDomainObject(XivelyRequest request,
-            HttpURLConnection response) throws IOException {
-        Type type = request.getType();
-        if (type != null) {
-            return parseJson(response, type);
-        } else {
-            return null;
-        }
-    }
-
-    /**
      * @param response
      * @return
      */
@@ -561,9 +560,28 @@ public class XivelyClient {
      */
     private <T> T parseJson(HttpURLConnection response, Type type)
             throws IOException {
+        return parseJson(response, type, null);
+    }
+
+    /**
+     * Parse JSON to the given type. If collectionType is not null, then we will
+     * return a collection, else the individual type is returned.
+     *
+     * @param response
+     * @param type
+     * @param collectionType
+     * @return
+     * @throws IOException
+     */
+    private <T> T parseJson(HttpURLConnection response, Type type,
+            Type collectionType) throws IOException {
 
         BufferedReader reader = new BufferedReader(new InputStreamReader(
                 getStream(response)));
+
+        if (collectionType != null) {
+            type = collectionType;
+        }
 
         try {
             return JsonUtils.fromJson(reader, type);
