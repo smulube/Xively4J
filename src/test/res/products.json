@@ -1,0 +1,44 @@
+{ "totalResults":3,
+  "products":[
+    { "description":"Test product.",
+      "name":"Product 0",
+      "product_id":"Dbw-2Mk0II3-ACizxR9k",
+      "secret":"377f93e5649c31635191c0e22258f5a5744698d3",
+      "state":"deploy",
+      "devices_count":4,
+      "activated_devices_count":0,
+      "feed_defaults":{
+        "title":"RasPi HomeBus",
+        "description":"Feed description",
+        "tags":["device:type=Xively4J"],
+        "private":"true",
+        "datastreams":[{
+          "id":"cpu",
+          "tags":["loadavg"],
+          "unit":{"symbol":"%"}
+        },{
+          "id":"hdd",
+          "tags":["diskspace","free"],
+          "unit":{"symbol":"MB"}
+        }]
+      },
+      "user":"user0"},
+    { "description":"Test product 1.",
+      "name":"Product 1",
+      "product_id":"HvKILjrxZpy3CmiTrxmq",
+      "secret":"e1c263198afcb4e198145f3e406817c30bde39fb",
+      "state":"deploy",
+      "devices_count":0,
+      "activated_devices_count":0,
+      "feed_defaults":{"private":"true"},
+      "user":"user0"},
+    { "description":"New batch",
+      "name":"New Batch",
+      "product_id":"xEYGNsNoyCCOCxzwChX1",
+      "secret":"5b603f83a1f9fdb827b7bcb7d3bbbe78b96b60d1",
+      "state":"deploy",
+      "devices_count":3,
+      "activated_devices_count":1,
+      "feed_defaults":{"private":"true"},
+      "user":"user0"}
+      ]}
