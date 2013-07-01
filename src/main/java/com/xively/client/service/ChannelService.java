@@ -58,7 +58,7 @@ public class ChannelService extends BaseService {
 
 		XivelyResponse response = client.get(request);
 
-		return (Channel) response.getDomainObject();
+		return (Channel) response.getBody();
 	}
 
 	/**
@@ -85,7 +85,7 @@ public class ChannelService extends BaseService {
 		XivelyRequest request = new XivelyRequest();
 		request.setUri(uri).setObject(channel);
 
-		return (Channel) client.put(request).getDomainObject();
+		return (Channel) client.put(request).getBody();
 	}
 
 	/**

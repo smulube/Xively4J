@@ -3,15 +3,18 @@
 package com.xively.client.service;
 
 import java.io.IOException;
+import java.util.List;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.google.gson.reflect.TypeToken;
 import com.xively.client.XivelyClient;
 import com.xively.client.XivelyConstants;
 import com.xively.client.http.XivelyRequest;
 import com.xively.client.http.XivelyResponse;
 import com.xively.client.models.Product;
+import com.xively.client.models.Product.State;
 
 /**
  * @author sam
@@ -55,7 +58,7 @@ public class ProductService extends BaseService {
 
         XivelyResponse response = this.client.post(request);
 
-        product = (Product) response.getDomainObject();
+        product = (Product) response.getBody();
         product.setId(response.getIdFromLocation());
 
         return product;
@@ -95,11 +98,42 @@ public class ProductService extends BaseService {
         uri.append("/").append(id);
 
         XivelyRequest request = new XivelyRequest();
-        request.setUri(uri.toString()).setType(Product.class);
+        request.setUri(uri).setType(Product.class);
 
         XivelyResponse response = this.client.get(request);
 
-        return (Product) response.getDomainObject();
+        return (Product) response.getBody();
+    }
+
+    /**
+     * Get all products accessible by the current user.
+     *
+     * @param state
+     * @return
+     * @throws IOException
+     */
+    @SuppressWarnings("unchecked")
+    public List<Product> list(State state) throws IOException {
+        StringBuilder uri = new StringBuilder(this.client.getBaseUri());
+        uri.append("/").append(XivelyConstants.SEGMENT_PRODUCTS);
+
+        XivelyRequest request = new XivelyRequest();
+
+        request.setUri(uri).setType(Product.class);
+
+        request.setCollectionType(new TypeToken<List<Product>>() {
+        }.getType());
+
+        if (state != null) {
+            request.addParam("state", state.getValue());
+        }
+
+        this.logger.info(request.toString());
+        this.logger.info(request.generateUri());
+
+        XivelyResponse response = this.client.get(request);
+
+        return (List<Product>) response.getBody();
     }
 
     /**
@@ -123,6 +157,6 @@ public class ProductService extends BaseService {
         request.setUri(uri);
         request.setObject(product);
 
-        return (Product) this.client.put(request).getDomainObject();
+        return (Product) this.client.put(request).getBody();
     }
 }

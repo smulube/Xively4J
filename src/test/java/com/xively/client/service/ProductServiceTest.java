@@ -49,7 +49,7 @@ public class ProductServiceTest {
     public void createProduct() throws IOException {
         Product newProduct = new Product();
         newProduct.setId("newid");
-        doReturn(newProduct).when(this.response).getDomainObject();
+        doReturn(newProduct).when(this.response).getBody();
         Product product = new Product();
         product.setName("Product Batch");
         this.service.create(product);

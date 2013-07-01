@@ -9,65 +9,61 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.google.gson.JsonElement;
-import com.google.gson.JsonObject;
 import com.google.gson.annotations.SerializedName;
-import com.xively.client.utils.JsonUtils;
 
 /**
  * @author sam
- * 
+ *
  */
 public class Product extends DomainObjectImpl {
+
+    public enum State {
+        DEVELOP("develop"), DEPLOY("deploy");
+
+        public static State fromString(String value) {
+            if (value != null) {
+                for (State state : State.values()) {
+                    if (value.equalsIgnoreCase(state.value)) {
+                        return state;
+                    }
+                }
+            }
+            throw new IllegalArgumentException("No State with value: " + value
+                    + " found.");
+        }
+
+        private final String value;
+
+        private State(String value) {
+            this.value = value;
+        }
+
+        public String getValue() {
+            return this.value;
+        }
+    }
 
     private static final long serialVersionUID = 8483131778172380123L;
 
     private String name;
     private String description;
     @SerializedName("product_id")
-    private transient String id;
-    private transient String secret;
-    private transient String state;
+    private String id;
+    private String secret;
+    private State state;
     @SerializedName("devices_count")
-    private transient Integer devicesCount;
+    private Integer devicesCount;
     @SerializedName("activated_devices_count")
-    private transient Integer activatedDevicesCount;
+    private Integer activatedDevicesCount;
     @SerializedName("feed_defaults")
     private FeedDefaults feedDefaults;
     private String user;
 
     private transient Logger logger = LoggerFactory.getLogger(Product.class);
 
-    /**
-     * Default constructor
-     */
-    public Product() {
-    }
-
-    /**
-     * @param productJson
-     */
-    public Product(JsonObject productJson) {
-        this.name = productJson.get("name").getAsString();
-        this.description = productJson.get("description").getAsString();
-        this.id = getAsString(productJson.get("product_id"));
-        this.secret = getAsString(productJson.get("secret"));
-        this.state = getAsString(productJson.get("state"));
-        this.devicesCount = getAsInt(productJson.get("devices_count"));
-        this.activatedDevicesCount = getAsInt(productJson
-                .get("activated_devices_count"));
-
-        if (productJson.get("feed_defaults") != null) {
-            this.feedDefaults = JsonUtils.fromJson(
-                    productJson.get("feed_defaults").toString(),
-                    FeedDefaults.class);
-        }
-
-        this.user = getAsString(productJson.get("user"));
-    }
-
     /*
      * (non-Javadoc)
-     * 
+     *
      * @see
      * com.xively.client.models.DomainObject#deepEquals(com.xively.client.models
      * .DomainObject)
@@ -92,7 +88,7 @@ public class Product extends DomainObjectImpl {
 
     /*
      * (non-Javadoc)
-     * 
+     *
      * @see com.xively.client.models.DomainObjectImpl#equals(java.lang.Object)
      */
     @Override
@@ -165,7 +161,7 @@ public class Product extends DomainObjectImpl {
     /**
      * @return the state
      */
-    public String getState() {
+    public State getState() {
         return this.state;
     }
 
@@ -178,7 +174,7 @@ public class Product extends DomainObjectImpl {
 
     /*
      * (non-Javadoc)
-     * 
+     *
      * @see com.xively.client.models.DomainObjectImpl#hashCode()
      */
     @Override
@@ -233,7 +229,7 @@ public class Product extends DomainObjectImpl {
 
     /*
      * (non-Javadoc)
-     * 
+     *
      * @see java.lang.Object#toString()
      */
     @Override

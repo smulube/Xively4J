@@ -25,18 +25,18 @@ public class XivelyResponse {
 
 	protected final HttpURLConnection response;
 
-	protected final Object domainObject;
+	protected final Object body;
 
-	public XivelyResponse(HttpURLConnection response, Object domainObject) {
+	public XivelyResponse(HttpURLConnection response, Object body) {
 		this.response = response;
-		this.domainObject = domainObject;
+		this.body = body;
 	}
 
 	/**
 	 * @return
 	 */
-	public Object getDomainObject() {
-		return this.domainObject;
+	public Object getBody() {
+		return this.body;
 	}
 
 	/**
@@ -56,7 +56,7 @@ public class XivelyResponse {
 	@Override
 	public String toString() {
 		return new ToStringBuilder(this).append("response", response)
-				.append("domainObject", domainObject).toString();
+				.append("domainObject", body).toString();
 	}
 
 	/**

@@ -21,10 +21,18 @@ public class FeedService extends BaseService {
 
 	private final Logger logger = LoggerFactory.getLogger(FeedService.class);
 
+	/**
+	 * Default constructor.
+	 */
 	public FeedService() {
 		super();
 	}
 
+	/**
+	 * Constructor that takes an explicit {@link XivelyClient} instance.
+	 *
+	 * @param client
+	 */
 	public FeedService(XivelyClient client) {
 		super(client);
 	}
@@ -47,7 +55,7 @@ public class FeedService extends BaseService {
 
 		XivelyResponse response = client.get(request);
 
-		return (Feed) response.getDomainObject();
+		return (Feed) response.getBody();
 	}
 
 	/**
@@ -71,7 +79,7 @@ public class FeedService extends BaseService {
 		request.setUri(uri);
 		request.setObject(feed);
 
-		return (Feed) client.put(request).getDomainObject();
+		return (Feed) client.put(request).getBody();
 	}
 
 	/**
@@ -105,6 +113,6 @@ public class FeedService extends BaseService {
 
 		XivelyResponse response = client.post(request);
 
-		return (Feed) client.post(request).getDomainObject();
+		return (Feed) client.post(request).getBody();
 	}
 }

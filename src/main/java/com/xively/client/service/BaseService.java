@@ -42,6 +42,7 @@ public abstract class BaseService {
 
 	/**
 	 * Throw {@link IllegalArgumentException} if id is null or empty.
+	 *
 	 * @param id
 	 */
 	protected void checkDomainObjectId(String id, String label) {

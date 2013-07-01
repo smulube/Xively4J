@@ -50,9 +50,12 @@ public class XivelyRequest {
 
     private Object object;
 
+    private Type collectionType;
+
+
     /**
-     * Add a single query parameter to this request.
-     * 
+     * Add a single key/value parameter pair to this request.
+     *
      * @param key
      * @param value
      */
@@ -66,7 +69,7 @@ public class XivelyRequest {
 
     /*
      * (non-Javadoc)
-     * 
+     *
      * @see java.lang.Object#equals(java.lang.Object)
      */
     @Override
@@ -113,6 +116,13 @@ public class XivelyRequest {
     }
 
     /**
+     * @return the collectionType
+     */
+    public Type getCollectionType() {
+        return this.collectionType;
+    }
+
+    /**
      * @return the object
      */
     public Object getObject() {
@@ -143,7 +153,7 @@ public class XivelyRequest {
 
     /*
      * (non-Javadoc)
-     * 
+     *
      * @see java.lang.Object#hashCode()
      */
     @Override
@@ -153,7 +163,18 @@ public class XivelyRequest {
     }
 
     /**
+     *
+     * @param type
+     * @return
+     */
+    public XivelyRequest setCollectionType(Type type) {
+        this.collectionType = type;
+        return this;
+    }
+
+    /**
      * @param object
+     * @return
      */
     public XivelyRequest setObject(Object object) {
         this.object = object;
@@ -161,7 +182,7 @@ public class XivelyRequest {
     }
 
     /**
-     * 
+     *
      * @param params
      *              the params to set
      * @return
@@ -181,7 +202,7 @@ public class XivelyRequest {
     }
 
     /**
-     * 
+     *
      * @param uri
      * @return
      */
@@ -191,7 +212,7 @@ public class XivelyRequest {
     }
 
     /**
-     * 
+     *
      * @param sb
      * @return
      */
@@ -201,13 +222,15 @@ public class XivelyRequest {
 
     /*
      * (non-Javadoc)
-     * 
+     *
      * @see java.lang.Object#toString()
      */
     @Override
     public String toString() {
         return new ToStringBuilder(this).append("uri", this.uri)
                 .append("type", this.type).append("object", this.object)
+                .append("collectionType", this.collectionType)
+                .append("params", this.params)
                 .toString();
     }
 
@@ -224,7 +247,7 @@ public class XivelyRequest {
 
     /**
      * Build URL encoded query string out of our params Map.
-     * 
+     *
      * @return
      */
     private void buildParams(StringBuilder uriBuilder) {

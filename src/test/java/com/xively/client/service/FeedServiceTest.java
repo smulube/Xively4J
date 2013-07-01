@@ -27,103 +27,103 @@ import com.xively.client.models.Feed;
 @RunWith(MockitoJUnitRunner.class)
 public class FeedServiceTest {
 
-	@Mock
-	private XivelyClient client;
+    @Mock
+    private XivelyClient client;
 
-	@Mock
-	private XivelyResponse response;
+    @Mock
+    private XivelyResponse response;
 
-	private FeedService service;
+    private FeedService service;
 
-	/**
-	 * @throws java.lang.Exception
-	 */
-	@Before
-	public void setUp() throws Exception {
-		doReturn("https://api.xively.com/v2").when(this.client).getBaseUri();
-		doReturn(this.response).when(this.client).get(any(XivelyRequest.class));
-		doReturn(this.response).when(this.client).put(any(XivelyRequest.class));
+    @Test(expected = IllegalArgumentException.class)
+    public void constructorNullArgument() {
+        new FeedService(null);
+    }
 
-		this.service = new FeedService(this.client);
-	}
+    @Test(expected = IllegalArgumentException.class)
+    public void createFeedWithNullDomainObject() throws IOException {
+        this.service.createFeed(null);
+    }
 
-	@Test(expected = IllegalArgumentException.class)
-	public void constructorNullArgument() {
-		new FeedService(null);
-	}
+    @Test
+    public void defaultConstructor() {
+        assertNotNull(new FeedService().getClient());
+    }
 
-	@Test
-	public void defaultConstructor() {
-		assertNotNull(new FeedService().getClient());
-	}
+    @Test
+    public void deleteFeed() throws IOException {
+        this.service.deleteFeed("123");
+        XivelyRequest request = new XivelyRequest();
+        request.setUri("https://api.xively.com/v2/feeds/123");
+        verify(this.client).delete(request);
+    }
 
-	@Test(expected = IllegalArgumentException.class)
-	public void getFeedWithNullId() throws IOException {
-		this.service.getFeed(null);
-	}
+    @Test(expected = IllegalArgumentException.class)
+    public void deleteFeedWithEmptyId() throws IOException {
+        this.service.deleteFeed("");
+    }
 
-	@Test(expected = IllegalArgumentException.class)
-	public void getFeedWithEmptyId() throws IOException {
-		this.service.getFeed("");
-	}
+    @Test(expected = IllegalArgumentException.class)
+    public void deleteFeedWithNullId() throws IOException {
+        this.service.deleteFeed(null);
+    }
 
-	@Test
-	public void getFeed() throws IOException {
-		this.service.getFeed("123");
-		XivelyRequest request = new XivelyRequest();
-		request.setUri("https://api.xively.com/v2/feeds/123");
-		request.setType(Feed.class);
-		verify(this.client).get(request);
-	}
+    @Test
+    public void getFeed() throws IOException {
+        this.service.getFeed("123");
+        XivelyRequest request = new XivelyRequest();
+        request.setUri("https://api.xively.com/v2/feeds/123");
+        request.setType(Feed.class);
+        verify(this.client).get(request);
+    }
 
-	@Test(expected = IllegalArgumentException.class)
-	public void updateNullFeed() throws IOException {
-		this.service.updateFeed(null);
-	}
+    @Test(expected = IllegalArgumentException.class)
+    public void getFeedWithEmptyId() throws IOException {
+        this.service.getFeed("");
+    }
 
-	@Test(expected = IllegalArgumentException.class)
-	public void updateNullFeedId() throws IOException {
-		Feed feed = new Feed();
-		this.service.updateFeed(feed);
-	}
+    @Test(expected = IllegalArgumentException.class)
+    public void getFeedWithNullId() throws IOException {
+        this.service.getFeed(null);
+    }
 
-	@Test(expected = IllegalArgumentException.class)
-	public void updateEmptyFeedId() throws IOException {
-		Feed feed = new Feed();
-		feed.setId("");
-		this.service.updateFeed(feed);
-	}
+    /**
+     * @throws java.lang.Exception
+     */
+    @Before
+    public void setUp() throws Exception {
+        doReturn("https://api.xively.com/v2").when(this.client).getBaseUri();
+        doReturn(this.response).when(this.client).get(any(XivelyRequest.class));
+        doReturn(this.response).when(this.client).put(any(XivelyRequest.class));
 
-	@Test
-	public void updateFeed() throws IOException {
-		Feed feed = new Feed();
-		feed.setId("123");
-		this.service.updateFeed(feed);
-		XivelyRequest request = new XivelyRequest();
-		request.setUri("https://api.xively.com/v2/feeds/123").setObject(feed);
-		verify(this.client).put(request);
-	}
+        this.service = new FeedService(this.client);
+    }
 
-	@Test(expected = IllegalArgumentException.class)
-	public void deleteFeedWithNullId() throws IOException {
-		this.service.deleteFeed(null);
-	}
+    @Test(expected = IllegalArgumentException.class)
+    public void updateEmptyFeedId() throws IOException {
+        Feed feed = new Feed();
+        feed.setId("");
+        this.service.updateFeed(feed);
+    }
 
-	@Test(expected = IllegalArgumentException.class)
-	public void deleteFeedWithEmptyId() throws IOException {
-		this.service.deleteFeed("");
-	}
+    @Test
+    public void updateFeed() throws IOException {
+        Feed feed = new Feed();
+        feed.setId("123");
+        this.service.updateFeed(feed);
+        XivelyRequest request = new XivelyRequest();
+        request.setUri("https://api.xively.com/v2/feeds/123").setObject(feed);
+        verify(this.client).put(request);
+    }
 
-	@Test
-	public void deleteFeed() throws IOException {
-		this.service.deleteFeed("123");
-		XivelyRequest request = new XivelyRequest();
-		request.setUri("https://api.xively.com/v2/feeds/123");
-		verify(this.client).delete(request);
-	}
+    @Test(expected = IllegalArgumentException.class)
+    public void updateNullFeed() throws IOException {
+        this.service.updateFeed(null);
+    }
 
-	@Test(expected = IllegalArgumentException.class)
-	public void createFeedWithNullDomainObject() throws IOException {
-		this.service.createFeed(null);
-	}
+    @Test(expected = IllegalArgumentException.class)
+    public void updateNullFeedId() throws IOException {
+        Feed feed = new Feed();
+        this.service.updateFeed(feed);
+    }
 }

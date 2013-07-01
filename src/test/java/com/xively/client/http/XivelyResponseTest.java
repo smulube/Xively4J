@@ -41,7 +41,7 @@ public class XivelyResponseTest {
 
 	@Test
 	public void domainObject() {
-		assertEquals(this.feed, this.response.getDomainObject());
+		assertEquals(this.feed, this.response.getBody());
 	}
 
 	@Test
