@@ -17,14 +17,6 @@ import org.junit.Test;
 public class CalendarUtilsTest {
 
     @Test
-    public void nonUtcSerialization() {
-        Calendar calendar = getCalendar();
-        calendar.setTimeZone(TimeZone.getTimeZone("PST"));
-        assertEquals("2012-11-09T12:56:42.282-08:00",
-                CalendarUtils.serializeCalendar(calendar));
-    }
-
-    @Test
     public void parseNonUTCString() throws ParseException {
         Calendar calendar = CalendarUtils
                 .parseTimestamp("2013-02-03T20:35:42.123456+04:00");
@@ -40,7 +32,8 @@ public class CalendarUtilsTest {
     @Test
     public void parseNonUTCStringInTimezone() throws ParseException {
         Calendar calendar = CalendarUtils
-                .parseTimestamp("2013-02-03T20:35:42.123456+04:00", TimeZone.getTimeZone("PST"));
+                .parseTimestamp("2013-02-03T20:35:42.123456+04:00",
+                        TimeZone.getTimeZone("PST"));
         assertEquals(calendar.get(Calendar.YEAR), 2013);
         assertEquals(calendar.get(Calendar.MONTH), Calendar.FEBRUARY);
         assertEquals(calendar.get(Calendar.DATE), 3);
@@ -77,9 +70,40 @@ public class CalendarUtilsTest {
     }
 
     @Test
-    public void utcSerialization() {
+    public void parseUTCStringNoMilliseconds() throws ParseException {
+        String[] timestamps = { "2013-11-10T10:20:20Z", "2013-11-10T10:20:20+00:00" };
+
+        for (int i = 0; i < timestamps.length; i++) {
+            String timestamp = timestamps[i];
+            Calendar calendar = CalendarUtils.parseTimestamp(timestamp);
+            assertEquals(calendar.get(Calendar.YEAR), 2013);
+            assertEquals(calendar.get(Calendar.MONTH), Calendar.NOVEMBER);
+            assertEquals(calendar.get(Calendar.DATE), 10);
+            assertEquals(calendar.get(Calendar.HOUR_OF_DAY), 10);
+            assertEquals(calendar.get(Calendar.MINUTE), 20);
+            assertEquals(calendar.get(Calendar.SECOND), 20);
+        }
+    }
+
+    @Test
+    public void serializeInTimeZone() {
+        Calendar calendar = getCalendar();
+        calendar.setTimeZone(TimeZone.getTimeZone("PST"));
+        assertEquals("2012-11-09T12:56:42.282-08:00",
+                CalendarUtils.serializeCalendar(calendar, true));
+    }
+
+    @Test
+    public void serializeInUTC() {
         Calendar calendar = getCalendar();
         String output = CalendarUtils.serializeCalendar(calendar);
+        assertEquals("2012-11-09T12:56:42Z", output);
+    }
+
+    @Test
+    public void serializeInUTCWithMillis() {
+        Calendar calendar = getCalendar();
+        String output = CalendarUtils.serializeCalendar(calendar, true);
         assertEquals("2012-11-09T12:56:42.282Z", output);
     }
 

@@ -30,7 +30,9 @@ public class CalendarUtils {
 
     private static Logger logger = LoggerFactory.getLogger(CalendarUtils.class);
 
-    public static final String ISO8601_FORMAT = "yyyy-MM-dd'T'HH:mm:ss.SSSXXX";
+    public static final String DATAPOINT_ISO8601_FORMAT = "yyyy-MM-dd'T'HH:mm:ss.SSSXXX";
+
+    public static final String ISO8601_FORMAT = "yyyy-MM-dd'T'HH:mm:ssXXX";
 
     /**
      * 
@@ -65,7 +67,13 @@ public class CalendarUtils {
             logger.debug("Formatted timestamp: " + timestamp);
         }
 
-        SimpleDateFormat format = new SimpleDateFormat(ISO8601_FORMAT);
+        SimpleDateFormat format;
+
+        if (timestamp.indexOf(".") >= 0) {
+            format = new SimpleDateFormat(DATAPOINT_ISO8601_FORMAT);
+        } else {
+            format = new SimpleDateFormat(ISO8601_FORMAT);
+        }
 
         Calendar calendar = Calendar.getInstance();
 
@@ -79,18 +87,43 @@ public class CalendarUtils {
     }
 
     /**
+     * Serialize a {@link Calendar} instance into an ISO 8601 string suitable
+     * for Xively. This does not include milliseconds in the output. To include
+     * milliseconds use
+     * {@link CalendarUtils#serializeCalendar(Calendar, boolean)}
      * 
-     * @param timestamp
+     * @param calendar
      * @return
      */
-    public static String serializeCalendar(Calendar timestamp) {
+    public static String serializeCalendar(Calendar calendar) {
+        return serializeCalendar(calendar, false);
+    }
+
+    /**
+     * Serialize a {@link Calendar} instance into an ISO 8601 string suitable
+     * for for Xively. Set includeMillis to true to include milliseconds in the
+     * generated string.
+     * 
+     * @param calendar
+     * @param includeMillis
+     * @return
+     */
+    public static String serializeCalendar(Calendar calendar,
+            boolean includeMillis) {
         if (logger.isDebugEnabled()) {
-            logger.debug("Serializing: " + timestamp.toString());
+            logger.debug("Serializing: " + calendar.toString());
         }
 
-        SimpleDateFormat format = new SimpleDateFormat(ISO8601_FORMAT);
+        SimpleDateFormat format;
 
-        format.setTimeZone(timestamp.getTimeZone());
-        return format.format(timestamp.getTime());
+        if (includeMillis) {
+            format = new SimpleDateFormat(DATAPOINT_ISO8601_FORMAT);
+        } else {
+            format = new SimpleDateFormat(ISO8601_FORMAT);
+        }
+
+        format.setTimeZone(calendar.getTimeZone());
+
+        return format.format(calendar.getTime());
     }
 }
