@@ -17,7 +17,7 @@ import com.google.gson.annotations.SerializedName;
  */
 public class Product extends DomainObjectImpl {
 
-    public enum State {
+    public static enum State {
         DEVELOP("develop"), DEPLOY("deploy");
 
         public static State fromString(String value) {

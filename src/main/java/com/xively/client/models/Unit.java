@@ -12,113 +12,113 @@ import org.apache.commons.lang3.builder.ToStringBuilder;
  */
 public class Unit {
 
-	public enum IFCClassification {
-		BASIC_SI("basicSI"),
-		DERIVED_SI("derivedSI"),
-		CONVERSION_BASED_UNITS("conservationBasedUnits"),
-		DERIVED_UNITS("derivedUnits"),
-		CONTEXT_DEPENDENT_UNITS("contextDependentUnits");
+    public static enum IFCClassification {
+        BASIC_SI("basicSI"),
+        DERIVED_SI("derivedSI"),
+        CONVERSION_BASED_UNITS("conservationBasedUnits"),
+        DERIVED_UNITS("derivedUnits"),
+        CONTEXT_DEPENDENT_UNITS("contextDependentUnits");
 
-		private final String value;
+        public static IFCClassification fromString(String value) {
+            if (value != null) {
+                for (IFCClassification classification : IFCClassification.values()) {
+                    if (value.equalsIgnoreCase(classification.value)) {
+                        return classification;
+                    }
+                }
+            }
+            throw new IllegalArgumentException(
+                    "No IFCClassification with value: " + value + " found.");
+        }
 
-		private IFCClassification(String value) {
-			this.value = value;
-		}
+        private final String value;
 
-		public String getValue() {
-			return value;
-		}
+        private IFCClassification(String value) {
+            this.value = value;
+        }
 
-		public static IFCClassification fromString(String value) {
-			if (value != null) {
-				for (IFCClassification classification : IFCClassification.values()) {
-					if (value.equalsIgnoreCase(classification.value)) {
-						return classification;
-					}
-				}
-			}
-			throw new IllegalArgumentException(
-					"No IFCClassification with value: " + value + " found.");
-		}
-	}
+        public String getValue() {
+            return this.value;
+        }
+    }
 
-	private String symbol;
-	private String label;
-	private IFCClassification type;
+    private String symbol;
+    private String label;
+    private IFCClassification type;
 
-	/**
-	 * @return the type
-	 */
-	public IFCClassification getType() {
-		return type;
-	}
+    @Override
+    public boolean equals(Object obj) {
+        if (obj == null) {
+            return false;
+        }
+        if (this == obj) {
+            return true;
+        }
+        if (obj.getClass() != getClass()) {
+            return false;
+        }
 
-	/**
-	 * @param type
-	 *            the type to set
-	 */
+        Unit other = (Unit) obj;
 
-	public void setType(IFCClassification type) {
-		this.type = type;
-	}
+        return new EqualsBuilder().append(this.symbol, other.symbol)
+                .append(this.label, other.label).append(this.type, other.type).isEquals();
+    }
 
-	/**
-	 * @return the symbol
-	 */
-	public String getSymbol() {
-		return symbol;
-	}
+    /**
+     * @return the label
+     */
+    public String getLabel() {
+        return this.label;
+    }
 
-	/**
-	 * @param symbol
-	 *            the symbol to set
-	 */
-	public void setSymbol(String symbol) {
-		this.symbol = symbol;
-	}
+    /**
+     * @return the symbol
+     */
+    public String getSymbol() {
+        return this.symbol;
+    }
 
-	/**
-	 * @return the label
-	 */
-	public String getLabel() {
-		return label;
-	}
+    /**
+     * @return the type
+     */
+    public IFCClassification getType() {
+        return this.type;
+    }
 
-	/**
-	 * @param label
-	 *            the label to set
-	 */
-	public void setLabel(String label) {
-		this.label = label;
-	}
+    @Override
+    public int hashCode() {
+        return new HashCodeBuilder(67, 43).append(this.symbol).append(this.label)
+                .append(this.type).toHashCode();
+    }
 
-	@Override
-	public int hashCode() {
-		return new HashCodeBuilder(67, 43).append(symbol).append(label)
-				.append(type).toHashCode();
-	}
+    /**
+     * @param label
+     *            the label to set
+     */
+    public void setLabel(String label) {
+        this.label = label;
+    }
 
-	@Override
-	public boolean equals(Object obj) {
-		if (obj == null) {
-			return false;
-		}
-		if (this == obj) {
-			return true;
-		}
-		if (obj.getClass() != getClass()) {
-			return false;
-		}
+    /**
+     * @param symbol
+     *            the symbol to set
+     */
+    public void setSymbol(String symbol) {
+        this.symbol = symbol;
+    }
 
-		Unit other = (Unit) obj;
+    /**
+     * @param type
+     *            the type to set
+     */
 
-		return new EqualsBuilder().append(symbol, other.symbol)
-				.append(label, other.label).append(type, other.type).isEquals();
-	}
+    public void setType(IFCClassification type) {
+        this.type = type;
+    }
 
-	@Override
-	public String toString() {
-		return new ToStringBuilder(this).append("symbol", symbol)
-				.append("label", label).append("type", type).toString();
-	}
+    @Override
+    public String toString() {
+        return new ToStringBuilder(this).append("symbol", this.symbol)
+                .append("label", this.label).append("type", this.type).toString();
+    }
 }
