@@ -12,26 +12,35 @@ import org.junit.Test;
  */
 public class HmacUtilsTest {
 
-	@Test
-	public void generatingHmac() {
-		String key = "377f93e5649c31635191c0e22258f5a5744698d3";
-		String value = "0001";
-		String hmac = "13bf6065634a624104cfa14a1f977bede2aa39d8";
+    @Test
+    public void activationCode() {
+        String productSecret = "377f93e5649c31635191c0e22258f5a5744698d3";
+        String deviceSerial = "0001";
+        String hmac = "13bf6065634a624104cfa14a1f977bede2aa39d8";
 
-		assertEquals(hmac, HmacUtils.hmacSha1(key, value));
-	}
+        assertEquals(hmac, HmacUtils.activationCode(productSecret, deviceSerial));
+    }
 
-	@Test
-	public void generatingHmacViaGeneralMethod() {
-		String key = "377f93e5649c31635191c0e22258f5a5744698d3";
-		String value = "0001";
-		String hmac = "13bf6065634a624104cfa14a1f977bede2aa39d8";
+    @Test
+    public void generatingHmac() {
+        String key = "377f93e5649c31635191c0e22258f5a5744698d3";
+        String value = "0001";
+        String hmac = "13bf6065634a624104cfa14a1f977bede2aa39d8";
 
-		assertEquals(hmac, HmacUtils.hmacSha("HmacSHA1", key, value));
-	}
+        assertEquals(hmac, HmacUtils.hmacSha1(key, value));
+    }
 
-	@Test(expected = RuntimeException.class)
-	public void invalidCrypto() {
-		HmacUtils.hmacSha("foo", "key", "value");
-	}
+    @Test
+    public void generatingHmacViaGeneralMethod() {
+        String key = "377f93e5649c31635191c0e22258f5a5744698d3";
+        String value = "0001";
+        String hmac = "13bf6065634a624104cfa14a1f977bede2aa39d8";
+
+        assertEquals(hmac, HmacUtils.hmacSha("HmacSHA1", key, value));
+    }
+
+    @Test(expected = RuntimeException.class)
+    public void invalidCrypto() {
+        HmacUtils.hmacSha("foo", "key", "value");
+    }
 }
