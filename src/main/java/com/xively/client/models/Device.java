@@ -2,6 +2,8 @@
 // This is part of Xively4J library, it is under the BSD 3-Clause license.
 package com.xively.client.models;
 
+import java.util.Calendar;
+
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 
@@ -15,8 +17,8 @@ public class Device extends DomainObjectImpl {
 
     private String serial;
     private String activationCode;
-    private String createdAt;
-    private String activatedAt;
+    private Calendar createdAt;
+    private Calendar activatedAt;
     private String feedId;
     private String apiKey;
 
@@ -45,7 +47,7 @@ public class Device extends DomainObjectImpl {
     /**
      * @return the activatedAt
      */
-    public String getActivatedAt() {
+    public Calendar getActivatedAt() {
         return this.activatedAt;
     }
 
@@ -66,7 +68,7 @@ public class Device extends DomainObjectImpl {
     /**
      * @return the createdAt
      */
-    public String getCreatedAt() {
+    public Calendar getCreatedAt() {
         return this.createdAt;
     }
 
@@ -98,7 +100,7 @@ public class Device extends DomainObjectImpl {
      * @param activatedAt
      *            the activatedAt to set
      */
-    public void setActivatedAt(String activatedAt) {
+    public void setActivatedAt(Calendar activatedAt) {
         this.activatedAt = activatedAt;
     }
 
@@ -122,7 +124,7 @@ public class Device extends DomainObjectImpl {
      * @param createdAt
      *            the createdAt to set
      */
-    public void setCreatedAt(String createdAt) {
+    public void setCreatedAt(Calendar createdAt) {
         this.createdAt = createdAt;
     }
 

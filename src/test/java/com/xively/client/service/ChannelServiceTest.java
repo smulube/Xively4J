@@ -208,9 +208,6 @@ public class ChannelServiceTest {
         doReturn(this.response).when(this.client).get(any(XivelyRequest.class));
         doReturn(this.response).when(this.client).put(any(XivelyRequest.class));
 
-        Feed feed = new Feed();
-        feed.setId("123");
-
         this.service = new ChannelService(this.client);
     }
 
@@ -221,6 +218,7 @@ public class ChannelServiceTest {
         Channel channel = new Channel();
         channel.setId("sensor1");
         this.service.updateChannel(feed, channel);
+
         XivelyRequest request = new XivelyRequest();
         request.setUri("https://api.xively.com/v2/feeds/123/datastreams/sensor1");
         request.setObject(channel);

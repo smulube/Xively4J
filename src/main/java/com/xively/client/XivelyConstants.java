@@ -8,21 +8,26 @@ package com.xively.client;
  */
 public interface XivelyConstants {
 
-	String API_HOST = "api.xively.com";
+    String API_HOST = "api.xively.com";
 
-	String PROTOCOL_HTTPS = "https";
+    String PROTOCOL_HTTPS = "https";
 
-	String API_URL = PROTOCOL_HTTPS + "://" + API_HOST;
+    String API_URL = PROTOCOL_HTTPS + "://" + API_HOST;
 
-	String SEGMENT_FEEDS = "feeds";
+    String SEGMENT_ACTIVATE = "activate";
 
-	String SEGMENT_DATASTREAMS = "datastreams";
+    String SEGMENT_FEEDS = "feeds";
 
-	String SEGMENT_DATAPOINTS = "datapoints";
+    String SEGMENT_DATASTREAMS = "datastreams";
 
-	String SEGMENT_PRODUCTS = "products";
+    String SEGMENT_DATAPOINTS = "datapoints";
 
-	String CONTENT_TYPE_JSON = "application/json";
+    String SEGMENT_PRODUCTS = "products";
 
-	String CHARSET_UTF8 = "UTF-8";
+    String SEGMENT_DEVICES = "devices";
+
+    String CONTENT_TYPE_JSON = "application/json";
+
+    String CHARSET_UTF8 = "UTF-8";
+
 }

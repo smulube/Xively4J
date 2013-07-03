@@ -4,6 +4,7 @@ package com.xively.client.utils;
 
 import java.io.Reader;
 import java.lang.reflect.Type;
+import java.util.Calendar;
 import java.util.List;
 
 import org.slf4j.Logger;
@@ -22,6 +23,7 @@ import com.xively.client.models.Feed;
 import com.xively.client.models.Location;
 import com.xively.client.models.Product;
 import com.xively.client.models.Unit;
+import com.xively.client.utils.json.CalendarAdapter;
 import com.xively.client.utils.json.DispositionAdapter;
 import com.xively.client.utils.json.DomainAdapter;
 import com.xively.client.utils.json.ExposureAdapter;
@@ -63,6 +65,7 @@ public abstract class JsonUtils {
                 new ExposureAdapter());
         builder.registerTypeAdapter(Product.State.class,
                 new ProductStateAdapter());
+        builder.registerTypeAdapter(Calendar.class, new CalendarAdapter());
 
         return builder.create();
     }

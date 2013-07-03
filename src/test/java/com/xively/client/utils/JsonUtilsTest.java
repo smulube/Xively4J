@@ -7,7 +7,9 @@ import static org.junit.Assert.assertTrue;
 
 import java.lang.reflect.Type;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
+import java.util.TimeZone;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -42,19 +44,29 @@ public class JsonUtilsTest {
         assertEquals("001", device.getSerial());
         assertEquals("dad1e5b9e04fcf549ef1795abba828902d68fe65",
                 device.getActivationCode());
-        assertEquals("2013-06-28T10:56:43Z", device.getCreatedAt());
-        assertEquals("2013-06-28T10:58:12Z", device.getActivatedAt());
+        Calendar createdAt = device.getCreatedAt();
+        createdAt.setTimeZone(TimeZone.getTimeZone("UTC"));
+        assertEquals("2013-06-28T10:56:43Z",
+                CalendarUtils.serializeCalendar(createdAt));
+        Calendar activatedAt = device.getActivatedAt();
+        activatedAt.setTimeZone(TimeZone.getTimeZone("UTC"));
+        assertEquals("2013-06-28T10:58:12Z",
+                CalendarUtils.serializeCalendar(activatedAt));
         assertEquals("942452504", device.getFeedId());
         assertEquals("J6YXM1Regk7aBus7tJ3CszBNAPLjfpaBNgNBjsLjANWWOZOi",
                 device.getApiKey());
     }
 
-    //    @Test
-    //    public void parsingDevices() {
-    //        String devicesJson = TestHelper.loadStringFromFile("devices.json");
-    //        List<Device> devices = JsonUtils.fromJsonList(devicesJson, Device.class);
-    //        assertTrue(devices.size() == 3);
-    //    }
+    @Test
+    public void parsingDevices() {
+        String devicesJson = TestHelper.loadStringFromFile("devices.json");
+        Type collectionType = new TypeToken<List<Device>>() {
+        }.getType();
+
+        List<Device> devices = JsonUtils.fromJson(devicesJson, collectionType);
+
+        assertTrue(devices.size() == 3);
+    }
 
     @Test
     public void parsingProduct() {
@@ -63,7 +75,8 @@ public class JsonUtilsTest {
         assertEquals("Product", product.getName());
         assertEquals("Product description", product.getDescription());
         assertEquals("2AKILjrxZpy3CmiTrxmq", product.getId());
-        assertEquals("e1c263198afcb4e198145f3e406817c30bde39fb", product.getSecret());
+        assertEquals("e1c263198afcb4e198145f3e406817c30bde39fb",
+                product.getSecret());
         assertEquals("deploy", product.getState().getValue());
         assertEquals(12, product.getDevicesCount().intValue());
         assertEquals(3, product.getActivatedDevicesCount().intValue());
@@ -89,24 +102,16 @@ public class JsonUtilsTest {
     @Test
     public void parsingProducts() {
         String productsJson = TestHelper.loadStringFromFile("products.json");
-        Type collectionType = new TypeToken<List<Product>>() {}.getType();
-        List<Product> products = JsonUtils.fromJson(productsJson, collectionType);
+        Type collectionType = new TypeToken<List<Product>>() {
+        }.getType();
+        List<Product> products = JsonUtils.fromJson(productsJson,
+                collectionType);
         assertTrue(products.size() == 3);
         Product product = products.get(0);
         assertEquals("Product 0", product.getName());
         assertEquals("Test product.", product.getDescription());
         assertEquals("Dbw-2Mk0II3-ACizxR9k", product.getId());
     }
-
-    //    @Test
-    //    public void parsingProducts() {
-    //        String productsJson = TestHelper.loadStringFromFile("products.json");
-    //        List<Product> products = JsonUtils.fromJsonList(productsJson,
-    //                Product.class);
-    //        assertTrue(products.size() == 3);
-    //        Product product1 = products.get(0);
-    //        assertEquals("Product 0", product1.getName());
-    //    }
 
     /**
      * @throws java.lang.Exception
